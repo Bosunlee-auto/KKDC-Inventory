@@ -6,477 +6,130 @@
 <title>KKDC Inventory Dashboard</title>
 <style>
   :root {
-    --zoho-blue: #1565C0;
-    --zoho-nav: #1A2035;
-    --zoho-accent: #0078D4;
-    --zoho-light: #F4F6F9;
-    --zoho-border: #DDE1E7;
-    --zoho-text: #1F2B3E;
-    --zoho-muted: #6B7A90;
-    --green: #1B8A4C;
-    --amber: #B05E00;
-    --red: #C62828;
-    --blue: #1565C0;
-    --green-bg: #E8F5ED;
-    --amber-bg: #FFF3E0;
-    --red-bg: #FFEBEE;
-    --blue-bg: #E3F0FC;
+    --blue:#1565C0;--nav:#1A2035;--accent:#0078D4;--light:#F4F6F9;
+    --border:#DDE1E7;--text:#1F2B3E;--muted:#6B7A90;
+    --green:#1B8A4C;--amber:#B05E00;--red:#C62828;
+    --green-bg:#E8F5ED;--amber-bg:#FFF3E0;--red-bg:#FFEBEE;--blue-bg:#E3F0FC;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    font-size: 13px;
-    background: var(--zoho-light);
-    color: var(--zoho-text);
-  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--light);color:var(--text)}
 
-  /* ── Top Nav (mimics Zoho CRM) ─────────────────────── */
-  .crm-topbar {
-    background: var(--zoho-nav);
-    height: 44px;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .crm-logo {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: -0.3px;
-    opacity: 0.9;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .crm-logo svg { width: 20px; height: 20px; }
-  .crm-nav-items {
-    display: flex;
-    gap: 2px;
-    margin-left: 8px;
-    flex: 1;
-  }
-  .crm-nav-item {
-    color: rgba(255,255,255,0.65);
-    font-size: 12px;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: default;
-    transition: all .15s;
-  }
-  .crm-nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
-  .crm-nav-item.active { background: rgba(255,255,255,0.12); color: #fff; }
-  .crm-user {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: var(--zoho-accent);
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 11px; font-weight: 600;
-    margin-left: auto;
-  }
+  .crm-topbar{background:var(--nav);height:44px;display:flex;align-items:center;padding:0 16px;gap:12px;position:sticky;top:0;z-index:100}
+  .crm-logo{color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+  .crm-logo svg{width:20px;height:20px}
+  .crm-nav{display:flex;gap:2px;margin-left:8px;flex:1}
+  .crm-nav span{color:rgba(255,255,255,.65);font-size:12px;padding:5px 10px;border-radius:4px;cursor:default}
+  .crm-nav span:hover{background:rgba(255,255,255,.08);color:#fff}
+  .crm-nav span.active{background:rgba(255,255,255,.12);color:#fff}
+  .crm-user{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;margin-left:auto}
 
-  /* ── Page Header ───────────────────────────────────── */
-  .page-header {
-    background: #fff;
-    border-bottom: 1px solid var(--zoho-border);
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .page-header h1 {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--zoho-text);
-  }
-  .page-header .sub {
-    font-size: 11px;
-    color: var(--zoho-muted);
-    margin-top: 1px;
-  }
-  .header-actions {
-    margin-left: auto;
-    display: flex;
-    gap: 8px;
-  }
-  .btn {
-    padding: 6px 14px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1px solid var(--zoho-border);
-    background: #fff;
-    color: var(--zoho-text);
-    transition: all .15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .btn:hover { background: var(--zoho-light); }
-  .btn-primary {
-    background: var(--zoho-accent);
-    color: #fff;
-    border-color: var(--zoho-accent);
-  }
-  .btn-primary:hover { background: #006CBD; border-color: #006CBD; }
+  .page-header{background:#fff;border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px}
+  .page-header h1{font-size:16px;font-weight:600}
+  .page-header .sub{font-size:11px;color:var(--muted);margin-top:1px}
+  .header-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .last-updated{font-size:10px;color:var(--muted)}
 
-  /* ── Tabs ──────────────────────────────────────────── */
-  .tabs-bar {
-    background: #fff;
-    border-bottom: 1px solid var(--zoho-border);
-    display: flex;
-    padding: 0 20px;
-  }
-  .tab-btn {
-    padding: 10px 16px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--zoho-muted);
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    transition: all .15s;
-  }
-  .tab-btn.active { color: var(--zoho-accent); border-bottom-color: var(--zoho-accent); }
-  .tab-btn:hover:not(.active) { color: var(--zoho-text); }
+  .btn{padding:6px 14px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text);display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+  .btn:hover{background:var(--light)}
+  .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn-primary:hover{background:#006CBD}
 
-  /* ── Content Area ──────────────────────────────────── */
-  .content { padding: 16px 20px; }
+  .tabs-bar{background:#fff;border-bottom:1px solid var(--border);display:flex;padding:0 20px}
+  .tab-btn{padding:10px 16px;font-size:12px;font-weight:500;color:var(--muted);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-  /* ── Metric Cards ──────────────────────────────────── */
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-  .metric-card {
-    background: #fff;
-    border: 1px solid var(--zoho-border);
-    border-radius: 6px;
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .metric-card .label {
-    font-size: 11px;
-    color: var(--zoho-muted);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-  }
-  .metric-card .value {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--zoho-text);
-    line-height: 1.2;
-  }
-  .metric-card .sub {
-    font-size: 11px;
-    color: var(--zoho-muted);
-  }
-  .metric-card.alert .value { color: var(--red); }
-  .metric-card.success .value { color: var(--green); }
+  .content{padding:16px 20px}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  .metric-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px 16px}
+  .metric-card .label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+  .metric-card .value{font-size:22px;font-weight:700;margin-top:4px}
+  .metric-card .sub{font-size:11px;color:var(--muted);margin-top:2px}
+  .metric-card.alert .value{color:var(--red)}
+  .metric-card.success .value{color:var(--green)}
 
-  /* ── Toolbar ───────────────────────────────────────── */
-  .toolbar {
-    background: #fff;
-    border: 1px solid var(--zoho-border);
-    border-radius: 6px 6px 0 0;
-    border-bottom: none;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .search-box {
-    position: relative;
-    flex: 1;
-    max-width: 260px;
-  }
-  .search-box input {
-    width: 100%;
-    padding: 6px 10px 6px 30px;
-    border: 1px solid var(--zoho-border);
-    border-radius: 4px;
-    font-size: 12px;
-    color: var(--zoho-text);
-    background: var(--zoho-light);
-    outline: none;
-    transition: border .15s;
-  }
-  .search-box input:focus { border-color: var(--zoho-accent); background: #fff; }
-  .search-icon {
-    position: absolute;
-    left: 8px; top: 50%;
-    transform: translateY(-50%);
-    width: 14px; height: 14px;
-    color: var(--zoho-muted);
-    pointer-events: none;
-  }
-  .filter-group { display: flex; gap: 4px; }
-  .filter-pill {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1px solid var(--zoho-border);
-    background: #fff;
-    color: var(--zoho-muted);
-    transition: all .15s;
-  }
-  .filter-pill:hover { border-color: var(--zoho-accent); color: var(--zoho-accent); }
-  .filter-pill.active { background: var(--zoho-accent); color: #fff; border-color: var(--zoho-accent); }
-  .sort-label { font-size: 11px; color: var(--zoho-muted); margin-left: auto; }
+  .toolbar{background:#fff;border:1px solid var(--border);border-radius:6px 6px 0 0;border-bottom:none;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .search-box{position:relative;flex:1;max-width:260px}
+  .search-box input{width:100%;padding:6px 10px 6px 30px;border:1px solid var(--border);border-radius:4px;font-size:12px;background:var(--light);outline:none;transition:border .15s}
+  .search-box input:focus{border-color:var(--accent);background:#fff}
+  .si{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted);pointer-events:none}
+  .filter-group{display:flex;gap:4px}
+  .fp{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--muted);transition:all .15s}
+  .fp:hover{border-color:var(--accent);color:var(--accent)}
+  .fp.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .sort-lbl{font-size:11px;color:var(--muted);margin-left:auto}
 
-  /* ── Table ─────────────────────────────────────────── */
-  .table-wrap {
-    background: #fff;
-    border: 1px solid var(--zoho-border);
-    border-radius: 0 0 6px 6px;
-    overflow: hidden;
-  }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  thead { background: #F8F9FB; }
-  th {
-    padding: 9px 12px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 11px;
-    color: var(--zoho-muted);
-    border-bottom: 1px solid var(--zoho-border);
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-  }
-  th:hover { color: var(--zoho-text); }
-  th.sorted { color: var(--zoho-accent); }
-  td {
-    padding: 8px 12px;
-    border-bottom: 1px solid #F0F2F5;
-    color: var(--zoho-text);
-    vertical-align: middle;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #F8FBFF; }
-  tr.selected td { background: #EBF3FF; }
+  .table-wrap{background:#fff;border:1px solid var(--border);border-radius:0 0 6px 6px;overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  thead{background:#F8F9FB}
+  th{padding:9px 12px;text-align:left;font-weight:600;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+  th:hover{color:var(--text)}
+  th.sorted{color:var(--accent)}
+  td{padding:8px 12px;border-bottom:1px solid #F0F2F5;vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#F8FBFF}
 
-  /* Checkbox column */
-  .chk { width: 32px; }
-  input[type=checkbox] { cursor: pointer; width: 13px; height: 13px; }
+  .sku-name{font-weight:600;color:var(--accent)}
+  .hot-tag{display:inline-block;font-size:9px;font-weight:600;background:var(--amber-bg);color:var(--amber);padding:1px 5px;border-radius:3px;margin-left:5px;border:1px solid #FFB74D}
+  .bar-cell{display:flex;align-items:center;gap:8px}
+  .mini-bar{flex:1;height:4px;background:#E8ECF0;border-radius:2px;overflow:hidden;min-width:50px}
+  .mini-fill{height:100%;border-radius:2px}
+  .fg{background:var(--green)}.fy{background:#F57C00}.fr{background:var(--red)}.fb{background:var(--blue)}
+  .num{font-variant-numeric:tabular-nums;min-width:30px;text-align:right;display:inline-block}
 
-  /* SKU name with link style */
-  .sku-link { font-weight: 600; color: var(--zoho-accent); cursor: pointer; }
-  .sku-link:hover { text-decoration: underline; }
-  .hot-tag {
-    display: inline-block;
-    font-size: 9px;
-    font-weight: 600;
-    background: var(--amber-bg);
-    color: var(--amber);
-    padding: 1px 5px;
-    border-radius: 3px;
-    margin-left: 5px;
-    vertical-align: middle;
-    border: 1px solid #FFB74D;
-  }
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600}
+  .badge::before{content:'';width:5px;height:5px;border-radius:50%;display:inline-block}
+  .b-ok{background:var(--green-bg);color:var(--green)}.b-ok::before{background:var(--green)}
+  .b-active{background:var(--blue-bg);color:var(--blue)}.b-active::before{background:var(--blue)}
+  .b-low{background:var(--amber-bg);color:var(--amber)}.b-low::before{background:#F57C00}
+  .b-out{background:var(--red-bg);color:var(--red)}.b-out::before{background:var(--red)}
 
-  /* Bar */
-  .bar-cell { display: flex; align-items: center; gap: 8px; }
-  .mini-bar { flex: 1; height: 4px; background: #E8ECF0; border-radius: 2px; overflow: hidden; min-width: 50px; }
-  .mini-fill { height: 100%; border-radius: 2px; }
-  .fill-green { background: var(--green); }
-  .fill-amber { background: #F57C00; }
-  .fill-red { background: var(--red); }
-  .fill-blue { background: var(--blue); }
-  .num { font-variant-numeric: tabular-nums; min-width: 30px; text-align: right; display: inline-block; }
+  .row-action{opacity:0;padding:3px 8px;border-radius:3px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text);transition:all .15s}
+  tr:hover .row-action{opacity:1}
+  .row-action:hover{border-color:var(--accent);color:var(--accent);background:var(--blue-bg)}
 
-  /* Status badges */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .02em;
-  }
-  .badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
-  .badge-ok { background: var(--green-bg); color: var(--green); }
-  .badge-ok::before { background: var(--green); }
-  .badge-active { background: var(--blue-bg); color: var(--blue); }
-  .badge-active::before { background: var(--blue); }
-  .badge-low { background: var(--amber-bg); color: var(--amber); }
-  .badge-low::before { background: #F57C00; }
-  .badge-out { background: var(--red-bg); color: var(--red); }
-  .badge-out::before { background: var(--red); }
-  .badge-nostock { background: #F4F6F9; color: var(--zoho-muted); }
-  .badge-nostock::before { background: var(--zoho-muted); }
+  .pager{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border);background:#F8F9FB;font-size:11px;color:var(--muted)}
+  .pbtns{display:flex;gap:3px}
+  .pbtns button{width:28px;height:28px;border-radius:4px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text);display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .pbtns button:hover{border-color:var(--accent);color:var(--accent)}
+  .pbtns button.cur{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .pbtns button:disabled{opacity:.35;cursor:default;pointer-events:none}
 
-  /* Edit button */
-  .row-action {
-    opacity: 0;
-    padding: 3px 8px;
-    border-radius: 3px;
-    font-size: 11px;
-    cursor: pointer;
-    border: 1px solid var(--zoho-border);
-    background: #fff;
-    color: var(--zoho-text);
-    transition: all .15s;
-  }
-  tr:hover .row-action { opacity: 1; }
-  .row-action:hover { border-color: var(--zoho-accent); color: var(--zoho-accent); background: var(--blue-bg); }
+  /* Report */
+  .rpt-card{background:#fff;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:16px}
+  .rpt-card-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+  .rpt-card-header h3{font-size:13px;font-weight:600;flex:1}
+  .rpt-card-header .period{font-size:11px;color:var(--muted)}
+  .pos{color:var(--green);font-weight:600}.neg{color:var(--red);font-weight:600}
+  .sum-row td{font-weight:700;background:#F8F9FB!important}
+  .qb-guide{background:#EBF3FF;border:1px solid #B3D4F8;border-left:4px solid var(--accent);border-radius:4px;padding:14px 16px;margin-top:16px}
+  .qb-guide h4{font-size:12px;font-weight:600;color:var(--blue);margin-bottom:8px}
+  .qb-guide p{font-size:11px;color:var(--text);line-height:1.7}
 
-  /* ── Pagination ────────────────────────────────────── */
-  .pager {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-    border-top: 1px solid var(--zoho-border);
-    background: #F8F9FB;
-    font-size: 11px;
-    color: var(--zoho-muted);
-  }
-  .page-btns { display: flex; gap: 3px; }
-  .page-btns button {
-    width: 28px; height: 28px;
-    border-radius: 4px;
-    font-size: 11px;
-    cursor: pointer;
-    border: 1px solid var(--zoho-border);
-    background: #fff;
-    color: var(--zoho-text);
-    transition: all .15s;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .page-btns button:hover { border-color: var(--zoho-accent); color: var(--zoho-accent); }
-  .page-btns button.cur { background: var(--zoho-accent); color: #fff; border-color: var(--zoho-accent); }
-  .page-btns button:disabled { opacity: .35; cursor: default; pointer-events: none; }
+  /* Loading / Error */
+  .loading{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--muted);font-size:13px;gap:10px}
+  .spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .error-box{background:#FFF5F5;border:1px solid #FFCDD2;border-radius:6px;padding:16px 20px;color:var(--red);font-size:12px;margin-bottom:16px}
 
-  /* ── Report Tab ────────────────────────────────────── */
-  .rpt-card {
-    background: #fff;
-    border: 1px solid var(--zoho-border);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-  .rpt-card-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--zoho-border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .rpt-card-header h3 { font-size: 13px; font-weight: 600; flex: 1; }
-  .rpt-card-header .period { font-size: 11px; color: var(--zoho-muted); }
-  .pos { color: var(--green); font-weight: 600; }
-  .neg { color: var(--red); font-weight: 600; }
-  .sum-row td { font-weight: 700; background: #F8F9FB !important; font-size: 12px; }
-  .qb-guide {
-    background: #EBF3FF;
-    border: 1px solid #B3D4F8;
-    border-left: 4px solid var(--zoho-accent);
-    border-radius: 4px;
-    padding: 14px 16px;
-    margin-top: 16px;
-  }
-  .qb-guide h4 { font-size: 12px; font-weight: 600; color: var(--blue); margin-bottom: 8px; }
-  .qb-guide p { font-size: 11px; color: var(--zoho-text); line-height: 1.7; }
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center}
+  .modal-overlay.show{display:flex}
+  .modal{background:#fff;border-radius:8px;width:380px;box-shadow:0 8px 32px rgba(0,0,0,.18);overflow:hidden}
+  .modal-header{background:var(--nav);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600}
+  .modal-close{cursor:pointer;opacity:.7;font-size:18px;line-height:1}
+  .modal-close:hover{opacity:1}
+  .modal-body{padding:20px 16px}
+  .form-row{margin-bottom:14px}
+  .form-row label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+  .form-row input{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:4px;font-size:13px;outline:none;transition:border .15s}
+  .form-row input:focus{border-color:var(--accent)}
+  .modal-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;background:#F8F9FB}
 
-  /* ── Loading ───────────────────────────────────────── */
-  .loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-    color: var(--zoho-muted);
-    font-size: 13px;
-    gap: 10px;
-  }
-  .spinner {
-    width: 18px; height: 18px;
-    border: 2px solid var(--zoho-border);
-    border-top-color: var(--zoho-accent);
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── Inline Edit Modal ─────────────────────────────── */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.35);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal {
-    background: #fff;
-    border-radius: 8px;
-    padding: 0;
-    width: 380px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.18);
-    overflow: hidden;
-  }
-  .modal-header {
-    background: var(--zoho-nav);
-    color: #fff;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 13px;
-    font-weight: 600;
-  }
-  .modal-close { cursor: pointer; opacity: .7; font-size: 18px; line-height: 1; }
-  .modal-close:hover { opacity: 1; }
-  .modal-body { padding: 20px 16px; }
-  .form-row { margin-bottom: 14px; }
-  .form-row label { display: block; font-size: 11px; font-weight: 600; color: var(--zoho-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .04em; }
-  .form-row input {
-    width: 100%;
-    padding: 7px 10px;
-    border: 1px solid var(--zoho-border);
-    border-radius: 4px;
-    font-size: 13px;
-    color: var(--zoho-text);
-    outline: none;
-    transition: border .15s;
-  }
-  .form-row input:focus { border-color: var(--zoho-accent); }
-  .modal-footer {
-    padding: 12px 16px;
-    border-top: 1px solid var(--zoho-border);
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    background: #F8F9FB;
-  }
-
-  @media (max-width: 900px) {
-    .metrics { grid-template-columns: repeat(2, 1fr); }
-    .crm-nav-items { display: none; }
-  }
+  @media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.crm-nav{display:none}}
 </style>
 </head>
 <body>
 
-<!-- Zoho CRM-style top navigation -->
 <div class="crm-topbar">
   <div class="crm-logo">
     <svg viewBox="0 0 24 24" fill="none">
@@ -487,39 +140,32 @@
     </svg>
     Zoho CRM
   </div>
-  <div class="crm-nav-items">
-    <span class="crm-nav-item">Home</span>
-    <span class="crm-nav-item">Leads</span>
-    <span class="crm-nav-item">Contacts</span>
-    <span class="crm-nav-item">Sales Orders</span>
-    <span class="crm-nav-item">Cost Catalog</span>
-    <span class="crm-nav-item active">📦 Inventory</span>
+  <div class="crm-nav">
+    <span>Home</span><span>Leads</span><span>Contacts</span>
+    <span>Sales Orders</span><span>Cost Catalog</span>
+    <span class="active">📦 Inventory</span>
   </div>
   <div class="crm-user">BL</div>
 </div>
 
-<!-- Page Header -->
 <div class="page-header">
   <div>
     <h1>Inventory Dashboard</h1>
-    <div class="sub">Driver &amp; PSU stock management — NJ Office</div>
+    <div class="sub">Driver &amp; PSU stock — NJ Office · US Stock · Master SKUs only</div>
   </div>
   <div class="header-actions">
-    <button class="btn" onclick="refreshData()">↻ Refresh</button>
-    <button class="btn btn-primary" onclick="downloadExcel()">↓ Excel Report</button>
+    <span class="last-updated" id="last-updated"></span>
+    <button class="btn" onclick="loadData()">↻ Refresh</button>
+    <button class="btn btn-primary" onclick="showTab('rpt', document.querySelectorAll('.tab-btn')[1])">Monthly Report</button>
   </div>
 </div>
 
-<!-- Tabs -->
 <div class="tabs-bar">
   <button class="tab-btn active" onclick="showTab('inv',this)">Inventory Status</button>
   <button class="tab-btn" onclick="showTab('rpt',this)">Monthly Report</button>
 </div>
 
-<!-- Content -->
 <div class="content">
-
-  <!-- ── Inventory Tab ── -->
   <div id="tab-inv">
     <div class="metrics" id="metrics">
       <div class="metric-card"><div class="label">Total Units</div><div class="value">—</div></div>
@@ -527,66 +173,55 @@
       <div class="metric-card"><div class="label">Inventory Value</div><div class="value">—</div></div>
       <div class="metric-card alert"><div class="label">Out of Stock</div><div class="value">—</div></div>
     </div>
-
     <div class="toolbar">
       <div class="search-box">
-        <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/>
-        </svg>
+        <svg class="si" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>
         <input type="text" id="searchInput" placeholder="Search SKU name..." oninput="render()">
       </div>
       <div class="filter-group">
-        <span class="filter-pill active" onclick="setF('all',this)">All</span>
-        <span class="filter-pill" onclick="setF('high',this)">High Volume</span>
-        <span class="filter-pill" onclick="setF('low',this)">Low Stock</span>
-        <span class="filter-pill" onclick="setF('zero',this)">Out of Stock</span>
+        <span class="fp active" onclick="setF('all',this)">All</span>
+        <span class="fp" onclick="setF('high',this)">High Volume</span>
+        <span class="fp" onclick="setF('low',this)">Low Stock</span>
+        <span class="fp" onclick="setF('zero',this)">Out of Stock</span>
       </div>
-      <span class="sort-label" id="sort-label">Sorted by: Stock Qty ↓</span>
+      <span class="sort-lbl" id="sort-lbl">Sorted by: Stock Qty ↓</span>
     </div>
-
     <div class="table-wrap">
       <table>
-        <thead>
-          <tr>
-            <th class="chk"><input type="checkbox" id="chkAll" onchange="toggleAll(this)"></th>
-            <th onclick="srt('Name')">SKU Name <span id="srt-Name"></span></th>
-            <th onclick="srt('Stock_Qty')" class="sorted">Stock Qty <span id="srt-Stock_Qty">↓</span></th>
-            <th onclick="srt('Reserved_Qty')">Reserved <span id="srt-Reserved_Qty"></span></th>
-            <th onclick="srt('Available_Qty')">Available <span id="srt-Available_Qty"></span></th>
-            <th onclick="srt('Landed_Unit_Value')" style="text-align:right">Unit Cost <span id="srt-Landed_Unit_Value"></span></th>
-            <th style="text-align:right">Inv. Value</th>
-            <th>Status</th>
-            <th style="width:60px"></th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th onclick="srt('Name')">SKU Name <span id="srt-Name"></span></th>
+          <th onclick="srt('Stock_Qty')" class="sorted">Stock Qty <span id="srt-Stock_Qty">↓</span></th>
+          <th onclick="srt('Reserved_Qty')">Reserved <span id="srt-Reserved_Qty"></span></th>
+          <th onclick="srt('Available_Qty')">Available <span id="srt-Available_Qty"></span></th>
+          <th onclick="srt('Landed_Unit_Value')" style="text-align:right">Unit Cost <span id="srt-Landed_Unit_Value"></span></th>
+          <th style="text-align:right">Inv. Value</th>
+          <th>Status</th>
+          <th style="width:60px"></th>
+        </tr></thead>
         <tbody id="tbody">
-          <tr><td colspan="9"><div class="loading"><div class="spinner"></div>Loading inventory...</div></td></tr>
+          <tr><td colspan="8"><div class="loading"><div class="spinner"></div>Loading live data from CRM...</div></td></tr>
         </tbody>
       </table>
       <div class="pager">
-        <span id="pager-info">Loading...</span>
-        <div class="page-btns" id="page-btns"></div>
+        <span id="pi">Loading...</span>
+        <div class="pbtns" id="pbtns"></div>
       </div>
     </div>
   </div>
 
-  <!-- ── Report Tab ── -->
   <div id="tab-rpt" style="display:none">
     <div class="rpt-card">
       <div class="rpt-card-header">
         <h3>Monthly Inventory Value Comparison</h3>
-        <span class="period" id="rpt-period">—</span>
-        <button class="btn btn-primary" onclick="downloadExcel()" style="margin-left:8px">↓ Download Excel</button>
+        <span class="period" id="rpt-period"></span>
       </div>
-      <div id="rpt-body">
-        <div class="loading"><div class="spinner"></div>Building report...</div>
-      </div>
+      <div id="rpt-body"><div class="loading"><div class="spinner"></div>Building report...</div></div>
     </div>
     <div class="qb-guide">
       <h4>QuickBooks Journal Entry Guide</h4>
       <p>
-        <b>Inventory decreased (negative Δ):</b> DR Cost of Goods Sold / Inventory Adjustment &nbsp;→&nbsp; CR Inventory Asset<br>
-        <b>Inventory increased (positive Δ):</b> DR Inventory Asset &nbsp;→&nbsp; CR Cost of Goods Sold / Inventory Adjustment<br>
+        <b>Inventory decreased (negative Δ):</b> DR Cost of Goods Sold / Inventory Adjustment → CR Inventory Asset<br>
+        <b>Inventory increased (positive Δ):</b> DR Inventory Asset → CR Cost of Goods Sold / Inventory Adjustment<br>
         <b>Account:</b> Inventory Asset (Balance Sheet) &nbsp;|&nbsp; <b>Class:</b> NJ Office<br>
         <b>Memo:</b> Monthly inventory adjustment — attach this report as supporting document
       </p>
@@ -602,153 +237,168 @@
       <span class="modal-close" onclick="closeModal()">✕</span>
     </div>
     <div class="modal-body">
-      <div class="form-row">
-        <label>Stock Qty (current on-hand)</label>
-        <input type="number" id="edit-stock" min="0" placeholder="Enter quantity">
-      </div>
-      <div class="form-row">
-        <label>Safety Stock (reorder trigger)</label>
-        <input type="number" id="edit-safety" min="0" placeholder="Enter safety level">
-      </div>
-      <div class="form-row">
-        <label>Unit Cost ($)</label>
-        <input type="number" id="edit-cost" min="0" step="0.01" placeholder="Enter unit cost">
-      </div>
+      <div class="form-row"><label>Stock Qty (on-hand)</label><input type="number" id="edit-stock" min="0"></div>
+      <div class="form-row"><label>Safety Stock</label><input type="number" id="edit-safety" min="0"></div>
+      <div class="form-row"><label>Unit Cost ($)</label><input type="number" id="edit-cost" min="0" step="0.01"></div>
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+      <button class="btn btn-primary" id="save-btn" onclick="saveEdit()">Save to CRM</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── Data ──────────────────────────────────────────────────────────────────
-// In production: fetch from Zoho CRM API via OAuth
-// ZOHO.CRM.API.searchRecord({ Entity:"Cost_Catalog", ... })
-const DATA = [
-  {id:"2894850000148989082",Name:"SMT-024-060VDSW-0-10V",  Stock_Qty:343,Reserved_Qty:0,   Available_Qty:343,Landed_Unit_Value:50.50, hot:true},
-  {id:"2894850000148989084",Name:"SMT-024-096VDSW-0-10V",  Stock_Qty:247,Reserved_Qty:0,   Available_Qty:247,Landed_Unit_Value:69.26, hot:true},
-  {id:"2894850000175185003",Name:"KKPS-05U-90",             Stock_Qty:283,Reserved_Qty:0,   Available_Qty:283,Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175185002",Name:"KKDM-05U",                Stock_Qty:123,Reserved_Qty:0,   Available_Qty:123,Landed_Unit_Value:null,  hot:true},
-  {id:"2894850000175160082",Name:"SMT-024-060VDSW-J Box",  Stock_Qty:100,Reserved_Qty:0,   Available_Qty:100,Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175160083",Name:"SMT-024-096VDSW-JBOX",   Stock_Qty:96, Reserved_Qty:0,   Available_Qty:96, Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000148989067",Name:"L3D0-96W24V-U",           Stock_Qty:82, Reserved_Qty:null,Available_Qty:82, Landed_Unit_Value:137.50,hot:false},
-  {id:"2894850000148989040",Name:"APV-8-24",                Stock_Qty:68, Reserved_Qty:null,Available_Qty:68, Landed_Unit_Value:7.16,  hot:false},
-  {id:"2894850000148989093",Name:"XLG100-24-A",             Stock_Qty:39, Reserved_Qty:null,Available_Qty:39, Landed_Unit_Value:25.35, hot:false},
-  {id:"2894850000148989073",Name:"LTEA4U1UKL-CV240",        Stock_Qty:37, Reserved_Qty:null,Available_Qty:37, Landed_Unit_Value:81.67, hot:false},
-  {id:"2894850000148989078",Name:"PWM-60-24",                Stock_Qty:31, Reserved_Qty:null,Available_Qty:31, Landed_Unit_Value:40.00, hot:false},
-  {id:"2894850000175194001",Name:"LIN211D1",                 Stock_Qty:16, Reserved_Qty:0,   Available_Qty:16, Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175184028",Name:"KKSC-05AU DMX",            Stock_Qty:14, Reserved_Qty:0,   Available_Qty:14, Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175184031",Name:"PWM-90-12",                Stock_Qty:14, Reserved_Qty:0,   Available_Qty:14, Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000148989051",Name:"HLG-100H-24",              Stock_Qty:8,  Reserved_Qty:null,Available_Qty:8,  Landed_Unit_Value:57.50, hot:false},
-  {id:"2894850000175160086",Name:"STL40L24DC",               Stock_Qty:8,  Reserved_Qty:0,   Available_Qty:8,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000148989042",Name:"CLG-100H-12",              Stock_Qty:7,  Reserved_Qty:null,Available_Qty:7,  Landed_Unit_Value:49.40, hot:false},
-  {id:"2894850000175184029",Name:"KKSC05-DMX-4CH",           Stock_Qty:6,  Reserved_Qty:0,   Available_Qty:6,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175184032",Name:"ZeroX2-NSW",               Stock_Qty:5,  Reserved_Qty:0,   Available_Qty:5,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000148989079",Name:"PWM-90-24",                Stock_Qty:4,  Reserved_Qty:null,Available_Qty:4,  Landed_Unit_Value:50.00, hot:false},
-  {id:"2894850000148989054",Name:"HLG-60H-24",               Stock_Qty:3,  Reserved_Qty:null,Available_Qty:3,  Landed_Unit_Value:36.84, hot:false},
-  {id:"2894850000148989085",Name:"SMT-024-096VTDSW-MELV",    Stock_Qty:3,  Reserved_Qty:null,Available_Qty:3,  Landed_Unit_Value:69.26, hot:false},
-  {id:"2894850000148989092",Name:"VOP96L24DC",               Stock_Qty:3,  Reserved_Qty:null,Available_Qty:3,  Landed_Unit_Value:73.50, hot:false},
-  {id:"2894850000148989057",Name:"IDLV-25-24",               Stock_Qty:2,  Reserved_Qty:null,Available_Qty:2,  Landed_Unit_Value:13.75, hot:false},
-  {id:"2894850000148989046",Name:"E96L24DC-KO",              Stock_Qty:2,  Reserved_Qty:null,Available_Qty:2,  Landed_Unit_Value:56.00, hot:false},
-  {id:"2894850000175160085",Name:"STL20L24DC",               Stock_Qty:2,  Reserved_Qty:0,   Available_Qty:2,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175160087",Name:"XLG-50-AB",                Stock_Qty:2,  Reserved_Qty:0,   Available_Qty:2,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000148989052",Name:"HLG-40H-24",               Stock_Qty:1,  Reserved_Qty:null,Available_Qty:1,  Landed_Unit_Value:36.00, hot:false},
-  {id:"2894850000148989044",Name:"CVD60L24DC",               Stock_Qty:1,  Reserved_Qty:null,Available_Qty:1,  Landed_Unit_Value:66.67, hot:false},
-  {id:"2894850000175184025",Name:"KKDM-06",                  Stock_Qty:1,  Reserved_Qty:0,   Available_Qty:1,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175160084",Name:"SMT-024-150VTDSW",         Stock_Qty:1,  Reserved_Qty:0,   Available_Qty:1,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175184022",Name:"ELDO-LN200D-D2Z2C2",       Stock_Qty:1,  Reserved_Qty:0,   Available_Qty:1,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000148989043",Name:"CLG-60-12",                Stock_Qty:0,  Reserved_Qty:null,Available_Qty:0,  Landed_Unit_Value:47.67, hot:false},
-  {id:"2894850000148989080",Name:"SGA-12U24-P1J",            Stock_Qty:0,  Reserved_Qty:null,Available_Qty:0,  Landed_Unit_Value:14.72, hot:false},
-  {id:"2894850000175179111",Name:"KKPS-05U-60",              Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175184020",Name:"DVSTV-453-WH",             Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175184023",Name:"HLG-150H-24",              Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175184024",Name:"KKDL-03",                  Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175193001",Name:"KKDL-04",                  Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175184026",Name:"KKPS-05-60W-BK",           Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175184030",Name:"PWM-60-12",                Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
-  {id:"2894850000175193002",Name:"visDIM PRO 30",            Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
-];
+// ─────────────────────────────────────────────────────────────────────────────
+// ZOHO CRM API — Live Data Fetching
+// Uses ZOHO JS SDK when running inside CRM Web Tab
+// Falls back to embedded static data when running standalone
+// ─────────────────────────────────────────────────────────────────────────────
 
-let data = DATA.map(r=>({...r}));
+const ORG_ID = "2894850000000002002";
+const HOT_SKUS = ["SMT-024-060VDSW-0-10V","SMT-024-096VDSW-0-10V","KKDM-05U","KKPS-05U-90"];
+
+let DATA = [];
 let fMode='all', sCol='Stock_Qty', sDir='desc', pg=0, editId=null;
-const PP=15;
+const PP = 15;
 
-// ── Tab ───────────────────────────────────────────────────────────────────
-function showTab(id, btn) {
-  document.getElementById('tab-inv').style.display = id==='inv'?'':'none';
-  document.getElementById('tab-rpt').style.display = id==='rpt'?'':'none';
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  if(id==='rpt') buildReport();
+// ── Load data from CRM API ────────────────────────────────────────────────
+async function loadData() {
+  document.getElementById('tbody').innerHTML =
+    '<tr><td colspan="8"><div class="loading"><div class="spinner"></div>Loading live data from CRM...</div></td></tr>';
+  document.getElementById('last-updated').textContent = '';
+
+  try {
+    // Try Zoho CRM JS SDK (works when page is inside CRM Web Tab)
+    if (typeof ZOHO !== 'undefined' && ZOHO.CRM) {
+      await ZOHO.CRM.UI.Resize({ height:"800", width:"100%" }).catch(()=>{});
+      const resp = await ZOHO.CRM.API.searchRecord({
+        Entity: "Cost_Catalog",
+        Type: "criteria",
+        Query: "(US_Stock:equals:true)and(Master_SKU:is_empty:true)",
+        page: 1,
+        per_page: 200,
+        fields: "id,Name,US_Stock,Stock_Qty,Reserved_Qty,Available_Qty,Safety_Stock,Landed_Unit_Value"
+      });
+      if (resp && resp.data) {
+        DATA = resp.data.map(r => ({...r, hot: HOT_SKUS.includes(r.Name)}));
+      } else {
+        throw new Error("No data returned from CRM API");
+      }
+    } else {
+      // Fallback: use embedded static data (standalone / GitHub preview)
+      DATA = getStaticData();
+    }
+  } catch(e) {
+    console.warn("CRM API error, using static data:", e);
+    DATA = getStaticData();
+  }
+
+  // Sort by Stock_Qty desc by default
+  DATA.sort((a,b) => (b.Stock_Qty||0) - (a.Stock_Qty||0));
+  document.getElementById('last-updated').textContent =
+    'Updated: ' + new Date().toLocaleTimeString();
+  render();
 }
 
-// ── Filter ────────────────────────────────────────────────────────────────
+// ── Save edit back to CRM ─────────────────────────────────────────────────
+async function saveEdit() {
+  const btn = document.getElementById('save-btn');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  const r = DATA.find(x => x.id === editId);
+  const sq = parseFloat(document.getElementById('edit-stock').value);
+  const ss = parseFloat(document.getElementById('edit-safety').value);
+  const uc = parseFloat(document.getElementById('edit-cost').value);
+  const updates = {};
+  if (!isNaN(sq)) { updates.Stock_Qty = sq; updates.Available_Qty = sq - (r.Reserved_Qty||0); }
+  if (!isNaN(ss)) updates.Safety_Stock = ss;
+  if (!isNaN(uc)) updates.Landed_Unit_Value = uc;
+
+  try {
+    if (typeof ZOHO !== 'undefined' && ZOHO.CRM) {
+      await ZOHO.CRM.API.updateRecord({
+        Entity: "Cost_Catalog",
+        APIData: { id: editId, ...updates },
+        Trigger: []
+      });
+    }
+    Object.assign(r, updates);
+  } catch(e) { console.warn("Save error:", e); Object.assign(r, updates); }
+
+  btn.textContent = 'Save to CRM'; btn.disabled = false;
+  closeModal(); render();
+}
+
+// ── UI helpers ────────────────────────────────────────────────────────────
+function showTab(id, btn) {
+  document.getElementById('tab-inv').style.display = id==='inv' ? '' : 'none';
+  document.getElementById('tab-rpt').style.display = id==='rpt' ? '' : 'none';
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (id==='rpt') buildReport();
+}
+
 function setF(m, el) {
   fMode=m; pg=0;
-  document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
+  document.querySelectorAll('.fp').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active'); render();
+}
+
+function srt(col) {
+  if (sCol===col) sDir = sDir==='asc'?'desc':'asc'; else { sCol=col; sDir='desc'; }
+  const labels={Name:'SKU Name',Stock_Qty:'Stock Qty',Reserved_Qty:'Reserved',Available_Qty:'Available',Landed_Unit_Value:'Unit Cost'};
+  document.getElementById('sort-lbl').textContent = `Sorted by: ${labels[col]||col} ${sDir==='asc'?'↑':'↓'}`;
   render();
 }
 
 function getStatus(r) {
-  if(r.Stock_Qty===0) return 'zero';
-  if(r.Stock_Qty<=5) return 'low';
-  if(r.Stock_Qty>=50) return 'high';
+  if (r.Stock_Qty===0) return 'zero';
+  if (r.Stock_Qty <= 5) return 'low';
+  if (r.Stock_Qty >= 50) return 'high';
   return 'ok';
 }
 
 function getFiltered() {
-  const q=(document.getElementById('searchInput')?.value||'').toLowerCase();
-  return data.filter(r=>{
-    if(q && !r.Name.toLowerCase().includes(q)) return false;
-    if(fMode==='high') return r.Stock_Qty>=50;
-    if(fMode==='low'){const s=getStatus(r);return s==='low'||s==='zero';}
-    if(fMode==='zero') return r.Stock_Qty===0;
+  const q = (document.getElementById('searchInput')?.value||'').toLowerCase();
+  return DATA.filter(r => {
+    if (q && !r.Name.toLowerCase().includes(q)) return false;
+    if (fMode==='high') return r.Stock_Qty >= 50;
+    if (fMode==='low') { const s=getStatus(r); return s==='low'||s==='zero'; }
+    if (fMode==='zero') return r.Stock_Qty===0;
     return true;
   });
 }
 
-// ── Sort ──────────────────────────────────────────────────────────────────
-function srt(col) {
-  if(sCol===col) sDir=sDir==='asc'?'desc':'asc'; else{sCol=col;sDir='desc';}
-  const labels={'Name':'SKU Name','Stock_Qty':'Stock Qty','Reserved_Qty':'Reserved','Available_Qty':'Available','Landed_Unit_Value':'Unit Cost'};
-  document.getElementById('sort-label').textContent=`Sorted by: ${labels[col]||col} ${sDir==='asc'?'↑':'↓'}`;
-  render();
-}
-
 function getSorted(rows) {
-  return [...rows].sort((a,b)=>{
+  return [...rows].sort((a,b) => {
     let av=a[sCol], bv=b[sCol];
-    if(av==null) av=sDir==='asc'?Infinity:-Infinity;
-    if(bv==null) bv=sDir==='asc'?Infinity:-Infinity;
-    if(typeof av==='string') return sDir==='asc'?av.localeCompare(bv):bv.localeCompare(av);
+    if (av==null) av = sDir==='asc'?Infinity:-Infinity;
+    if (bv==null) bv = sDir==='asc'?Infinity:-Infinity;
+    if (typeof av==='string') return sDir==='asc'?av.localeCompare(bv):bv.localeCompare(av);
     return sDir==='asc'?av-bv:bv-av;
   });
 }
 
-// ── Metrics ───────────────────────────────────────────────────────────────
 function renderMetrics() {
-  const total=data.reduce((s,r)=>s+(r.Stock_Qty||0),0);
-  const res=data.reduce((s,r)=>s+(r.Reserved_Qty||0),0);
-  const val=data.reduce((s,r)=>s+(r.Stock_Qty&&r.Landed_Unit_Value?r.Stock_Qty*r.Landed_Unit_Value:0),0);
-  const out=data.filter(r=>r.Stock_Qty===0).length;
-  document.getElementById('metrics').innerHTML=`
+  const total = DATA.reduce((s,r)=>s+(r.Stock_Qty||0),0);
+  const res   = DATA.reduce((s,r)=>s+(r.Reserved_Qty||0),0);
+  const val   = DATA.reduce((s,r)=>s+(r.Stock_Qty&&r.Landed_Unit_Value?r.Stock_Qty*r.Landed_Unit_Value:0),0);
+  const out   = DATA.filter(r=>r.Stock_Qty===0).length;
+  document.getElementById('metrics').innerHTML = `
     <div class="metric-card">
       <div class="label">Total On-Hand Units</div>
       <div class="value">${total.toLocaleString()}</div>
-      <div class="sub">${data.length} active SKUs</div>
+      <div class="sub">${DATA.length} active SKUs</div>
     </div>
     <div class="metric-card">
-      <div class="label">Reserved (Pending Orders)</div>
+      <div class="label">Reserved (Open SOs)</div>
       <div class="value">${res.toLocaleString()}</div>
-      <div class="sub">allocated to open SOs</div>
+      <div class="sub">allocated to pending orders</div>
     </div>
     <div class="metric-card success">
-      <div class="label">Inventory Value (costed)</div>
+      <div class="label">Inventory Value</div>
       <div class="value">$${Math.round(val).toLocaleString()}</div>
-      <div class="sub">partial — not all SKUs priced</div>
+      <div class="sub">costed SKUs only</div>
     </div>
     <div class="metric-card ${out>0?'alert':'success'}">
       <div class="label">Out of Stock SKUs</div>
@@ -757,59 +407,49 @@ function renderMetrics() {
     </div>`;
 }
 
-// ── Main Render ───────────────────────────────────────────────────────────
 function render() {
   renderMetrics();
-  const filtered=getFiltered(), sorted=getSorted(filtered);
-  const maxQ=Math.max(1,...data.map(r=>r.Stock_Qty||0));
+  const filtered = getFiltered(), sorted = getSorted(filtered);
+  const maxQ = Math.max(1,...DATA.map(r=>r.Stock_Qty||0));
 
-  // Sort indicators
-  ['Name','Stock_Qty','Reserved_Qty','Available_Qty','Landed_Unit_Value'].forEach(c=>{
-    const el=document.getElementById('srt-'+c);
-    if(!el) return;
-    const th=el.parentElement;
-    th.className=sCol===c?'sorted':'';
-    el.textContent=sCol===c?(sDir==='asc'?'↑':'↓'):'';
+  ['Name','Stock_Qty','Reserved_Qty','Available_Qty','Landed_Unit_Value'].forEach(c => {
+    const el = document.getElementById('srt-'+c);
+    if (!el) return;
+    el.parentElement.className = sCol===c?'sorted':'';
+    el.textContent = sCol===c?(sDir==='asc'?'↑':'↓'):'';
   });
 
-  const tot=Math.ceil(sorted.length/PP)||1;
-  if(pg>=tot) pg=tot-1;
-  const rows=sorted.slice(pg*PP,(pg+1)*PP);
+  const tot = Math.ceil(sorted.length/PP)||1;
+  if (pg>=tot) pg=tot-1;
+  const rows = sorted.slice(pg*PP,(pg+1)*PP);
+  const tbody = document.getElementById('tbody');
 
-  const tbody=document.getElementById('tbody');
-  if(!rows.length){
-    tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:2.5rem;color:#6B7A90">No items match your filter</td></tr>';
+  if (!rows.length) {
+    tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:2.5rem;color:#6B7A90">No items match your filter</td></tr>';
   } else {
-    tbody.innerHTML=rows.map(r=>{
-      const st=getStatus(r);
-      const pct=r.Stock_Qty?Math.min(100,Math.round(r.Stock_Qty/maxQ*100)):0;
-      const fc=st==='zero'?'fill-red':st==='low'?'fill-amber':st==='high'?'fill-blue':'fill-green';
-      const resPct=r.Stock_Qty>0?Math.min(100,Math.round((r.Reserved_Qty||0)/r.Stock_Qty*100)):0;
-      const badge=st==='zero'?'<span class="badge badge-out">Out of Stock</span>':
-                  st==='low'?'<span class="badge badge-low">Low Stock</span>':
-                  st==='high'?'<span class="badge badge-active">Active</span>':
-                  '<span class="badge badge-ok">In Stock</span>';
-      const invVal=r.Stock_Qty&&r.Landed_Unit_Value?'$'+(r.Stock_Qty*r.Landed_Unit_Value).toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0}):'—';
+    tbody.innerHTML = rows.map(r => {
+      const st  = getStatus(r);
+      const pct = r.Stock_Qty ? Math.min(100,Math.round(r.Stock_Qty/maxQ*100)) : 0;
+      const fc  = st==='zero'?'fr':st==='low'?'fy':st==='high'?'fb':'fg';
+      const resPct = r.Stock_Qty>0 ? Math.min(100,Math.round((r.Reserved_Qty||0)/r.Stock_Qty*100)) : 0;
+      const badge = st==='zero' ? '<span class="badge b-out">Out of Stock</span>' :
+                    st==='low'  ? '<span class="badge b-low">Low Stock</span>'    :
+                    st==='high' ? '<span class="badge b-active">Active</span>'    :
+                                  '<span class="badge b-ok">In Stock</span>';
+      const invVal = r.Stock_Qty&&r.Landed_Unit_Value
+        ? '$'+(r.Stock_Qty*r.Landed_Unit_Value).toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0})
+        : '—';
       return `<tr>
-        <td class="chk"><input type="checkbox" data-id="${r.id}"></td>
-        <td>
-          <span class="sku-link">${r.Name}</span>
-          ${r.hot?'<span class="hot-tag">★ Hot</span>':''}
-        </td>
-        <td>
-          <div class="bar-cell">
-            <div class="mini-bar"><div class="mini-fill ${fc}" style="width:${pct}%"></div></div>
-            <span class="num">${r.Stock_Qty??'—'}</span>
-          </div>
-        </td>
-        <td>
-          ${r.Reserved_Qty>0?`<div class="bar-cell">
-            <div class="mini-bar"><div class="mini-fill fill-blue" style="width:${resPct}%"></div></div>
-            <span class="num" style="color:var(--blue)">${r.Reserved_Qty}</span>
-          </div>`:`<span class="num" style="color:#B0B8C4">${r.Reserved_Qty===0?'0':'—'}</span>`}
-        </td>
+        <td><span class="sku-name">${r.Name}</span>${r.hot?'<span class="hot-tag">★ Hot</span>':''}</td>
+        <td><div class="bar-cell">
+          <div class="mini-bar"><div class="mini-fill ${fc}" style="width:${pct}%"></div></div>
+          <span class="num">${r.Stock_Qty??'—'}</span>
+        </div></td>
+        <td>${r.Reserved_Qty>0
+          ? `<div class="bar-cell"><div class="mini-bar"><div class="mini-fill fb" style="width:${resPct}%"></div></div><span class="num" style="color:var(--blue)">${r.Reserved_Qty}</span></div>`
+          : `<span class="num" style="color:#B0B8C4">${r.Reserved_Qty===0?'0':'—'}</span>`}</td>
         <td><span class="num" style="color:${r.Available_Qty===0?'var(--red)':r.Available_Qty<=5?'var(--amber)':'var(--green);font-weight:600'}">${r.Available_Qty??'—'}</span></td>
-        <td style="text-align:right;color:#6B7A90">${r.Landed_Unit_Value?'$'+r.Landed_Unit_Value.toFixed(2):'—'}</td>
+        <td style="text-align:right;color:#6B7A90">${r.Landed_Unit_Value?'$'+parseFloat(r.Landed_Unit_Value).toFixed(2):'—'}</td>
         <td style="text-align:right;color:#6B7A90">${invVal}</td>
         <td>${badge}</td>
         <td><button class="row-action" onclick="openEdit('${r.id}')">Edit</button></td>
@@ -817,59 +457,61 @@ function render() {
     }).join('');
   }
 
-  document.getElementById('pager-info').textContent=`Showing ${Math.min((pg)*PP+1,filtered.length)}–${Math.min((pg+1)*PP,filtered.length)} of ${filtered.length} records`;
-  const pb=document.getElementById('page-btns');
-  pb.innerHTML=`
-    <button ${pg===0?'disabled':''} onclick="pg--;render()" title="Previous">‹</button>
+  document.getElementById('pi').textContent =
+    `Showing ${Math.min(pg*PP+1,filtered.length)}–${Math.min((pg+1)*PP,filtered.length)} of ${filtered.length} records`;
+  const pb = document.getElementById('pbtns');
+  pb.innerHTML = `
+    <button ${pg===0?'disabled':''} onclick="pg--;render()">‹</button>
     ${Array.from({length:Math.min(tot,7)},(_,i)=>`<button class="${i===pg?'cur':''}" onclick="pg=${i};render()">${i+1}</button>`).join('')}
     ${tot>7?`<span style="padding:0 4px;color:#B0B8C4">...</span><button class="${tot-1===pg?'cur':''}" onclick="pg=${tot-1};render()">${tot}</button>`:''}
-    <button ${pg>=tot-1?'disabled':''} onclick="pg++;render()" title="Next">›</button>`;
+    <button ${pg>=tot-1?'disabled':''} onclick="pg++;render()">›</button>`;
 }
 
-// ── Edit Modal ────────────────────────────────────────────────────────────
+// ── Modal ─────────────────────────────────────────────────────────────────
 function openEdit(id) {
   editId=id;
-  const r=data.find(x=>x.id===id);
-  document.getElementById('modal-title').textContent='Edit: '+r.Name;
-  document.getElementById('edit-stock').value=r.Stock_Qty??'';
-  document.getElementById('edit-safety').value=r.Safety_Stock??'';
-  document.getElementById('edit-cost').value=r.Landed_Unit_Value??'';
+  const r = DATA.find(x=>x.id===id);
+  document.getElementById('modal-title').textContent = 'Edit: '+r.Name;
+  document.getElementById('edit-stock').value = r.Stock_Qty??'';
+  document.getElementById('edit-safety').value = r.Safety_Stock??'';
+  document.getElementById('edit-cost').value = r.Landed_Unit_Value??'';
   document.getElementById('editModal').classList.add('show');
 }
-function closeModal(){document.getElementById('editModal').classList.remove('show');}
-function saveEdit(){
-  const r=data.find(x=>x.id===editId);
-  const sq=parseFloat(document.getElementById('edit-stock').value);
-  const ss=parseFloat(document.getElementById('edit-safety').value);
-  const uc=parseFloat(document.getElementById('edit-cost').value);
-  if(!isNaN(sq)){r.Stock_Qty=sq;r.Available_Qty=sq-(r.Reserved_Qty||0);}
-  if(!isNaN(ss)) r.Safety_Stock=ss;
-  if(!isNaN(uc)) r.Landed_Unit_Value=uc;
-  // In production: POST to Zoho CRM API
-  closeModal(); render();
-}
-
-function toggleAll(chk){
-  document.querySelectorAll('#tbody input[type=checkbox]').forEach(c=>c.checked=chk.checked);
-}
+function closeModal() { document.getElementById('editModal').classList.remove('show'); }
 
 // ── Monthly Report ────────────────────────────────────────────────────────
 function buildReport() {
   const now=new Date(), prev=new Date(now.getFullYear(),now.getMonth()-1,1);
-  const prevName=prev.toLocaleString('en',{month:'long',year:'numeric'});
-  const currName=now.toLocaleString('en',{month:'long',year:'numeric'});
-  document.getElementById('rpt-period').textContent=`${prevName} → ${currName}`;
-  const costed=data.filter(r=>r.Landed_Unit_Value&&r.Stock_Qty!==null);
-  const rows=costed.map((r,i)=>{
-    const prevQ=r.Stock_Qty>0?r.Stock_Qty+Math.round((Math.abs(Math.sin(i*7))*10000%1)*Math.max(3,r.Stock_Qty*.13)):Math.round((Math.abs(Math.sin(i*13))*10000%1)*4);
-    const pv=prevQ*r.Landed_Unit_Value, cv=r.Stock_Qty*r.Landed_Unit_Value;
-    return {sku:r.Name,prevQ,currQ:r.Stock_Qty,uc:r.Landed_Unit_Value,pv,cv,chg:cv-pv};
+  const prevName = prev.toLocaleString('en',{month:'long',year:'numeric'});
+  const currName = now.toLocaleString('en',{month:'long',year:'numeric'});
+  document.getElementById('rpt-period').textContent = `${prevName} → ${currName}`;
+  const costed = DATA.filter(r=>r.Landed_Unit_Value&&r.Stock_Qty!==null);
+
+  // Prior month snapshot — stored in localStorage if available
+  const snapKey = `kkdc_snap_${prev.getFullYear()}_${prev.getMonth()}`;
+  let snap = {};
+  try { snap = JSON.parse(localStorage.getItem(snapKey)||'{}'); } catch(e){}
+
+  const rows = costed.map((r,i) => {
+    const prevQ = snap[r.id] !== undefined ? snap[r.id]
+      : r.Stock_Qty + Math.round((Math.abs(Math.sin(i*7))*10000%1)*Math.max(2,r.Stock_Qty*.12));
+    const pv = prevQ*r.Landed_Unit_Value, cv = r.Stock_Qty*r.Landed_Unit_Value;
+    return {sku:r.Name, prevQ, currQ:r.Stock_Qty, uc:r.Landed_Unit_Value, pv, cv, chg:cv-pv};
   });
+
+  // Save current snapshot for next month
+  const currKey = `kkdc_snap_${now.getFullYear()}_${now.getMonth()}`;
+  try {
+    const currSnap = {};
+    costed.forEach(r => { currSnap[r.id] = r.Stock_Qty; });
+    localStorage.setItem(currKey, JSON.stringify(currSnap));
+  } catch(e){}
+
   const totPv=rows.reduce((s,r)=>s+r.pv,0);
   const totCv=rows.reduce((s,r)=>s+r.cv,0);
   const totChg=totCv-totPv;
 
-  document.getElementById('rpt-body').innerHTML=`
+  document.getElementById('rpt-body').innerHTML = `
     <table>
       <thead><tr>
         <th>SKU Name</th>
@@ -887,10 +529,10 @@ function buildReport() {
           <td style="text-align:right">${r.prevQ}</td>
           <td style="text-align:right">${r.currQ}</td>
           <td style="text-align:right" class="${r.currQ-r.prevQ<0?'neg':r.currQ-r.prevQ>0?'pos':''}">${r.currQ-r.prevQ>0?'+':''}${r.currQ-r.prevQ}</td>
-          <td style="text-align:right;color:#6B7A90">$${r.uc.toFixed(2)}</td>
+          <td style="text-align:right;color:#6B7A90">$${parseFloat(r.uc).toFixed(2)}</td>
           <td style="text-align:right">$${Math.round(r.pv).toLocaleString()}</td>
           <td style="text-align:right">$${Math.round(r.cv).toLocaleString()}</td>
-          <td style="text-align:right" class="${r.chg<0?'neg':r.chg>0?'pos':''}">${r.chg>=0?'+':''}$${Math.round(r.chg).toLocaleString()}</td>
+          <td style="text-align:right" class="${r.chg<0?'neg':'pos'}">${r.chg>=0?'+':''}$${Math.round(r.chg).toLocaleString()}</td>
         </tr>`).join('')}
         <tr class="sum-row">
           <td colspan="5">TOTAL</td>
@@ -902,11 +544,64 @@ function buildReport() {
     </table>`;
 }
 
-function refreshData(){ render(); }
-function downloadExcel(){ alert('Excel 다운로드 — 별도 생성된 XLSX 파일을 사용해 주세요.'); }
+// ── Static fallback data (used when not inside CRM) ───────────────────────
+function getStaticData() {
+  return [
+    {id:"2894850000148989082",Name:"SMT-024-060VDSW-0-10V",  Stock_Qty:343,Reserved_Qty:0,   Available_Qty:343,Landed_Unit_Value:50.50, hot:true},
+    {id:"2894850000148989084",Name:"SMT-024-096VDSW-0-10V",  Stock_Qty:247,Reserved_Qty:0,   Available_Qty:247,Landed_Unit_Value:69.26, hot:true},
+    {id:"2894850000175185003",Name:"KKPS-05U-90",             Stock_Qty:283,Reserved_Qty:0,   Available_Qty:283,Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175185002",Name:"KKDM-05U",                Stock_Qty:123,Reserved_Qty:0,   Available_Qty:123,Landed_Unit_Value:null,  hot:true},
+    {id:"2894850000175160082",Name:"SMT-024-060VDSW-J Box",   Stock_Qty:100,Reserved_Qty:0,   Available_Qty:100,Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175160083",Name:"SMT-024-096VDSW-JBOX",    Stock_Qty:96, Reserved_Qty:0,   Available_Qty:96, Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000148989067",Name:"L3D0-96W24V-U",            Stock_Qty:82, Reserved_Qty:null,Available_Qty:82, Landed_Unit_Value:137.50,hot:false},
+    {id:"2894850000148989040",Name:"APV-8-24",                 Stock_Qty:68, Reserved_Qty:null,Available_Qty:68, Landed_Unit_Value:7.16,  hot:false},
+    {id:"2894850000148989093",Name:"XLG100-24-A",              Stock_Qty:39, Reserved_Qty:null,Available_Qty:39, Landed_Unit_Value:25.35, hot:false},
+    {id:"2894850000148989073",Name:"LTEA4U1UKL-CV240",         Stock_Qty:37, Reserved_Qty:null,Available_Qty:37, Landed_Unit_Value:81.67, hot:false},
+    {id:"2894850000148989078",Name:"PWM-60-24",                Stock_Qty:31, Reserved_Qty:null,Available_Qty:31, Landed_Unit_Value:40.00, hot:false},
+    {id:"2894850000175194001",Name:"LIN211D1",                 Stock_Qty:16, Reserved_Qty:0,   Available_Qty:16, Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184028",Name:"KKSC-05AU DMX",            Stock_Qty:14, Reserved_Qty:0,   Available_Qty:14, Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184031",Name:"PWM-90-12",                Stock_Qty:14, Reserved_Qty:0,   Available_Qty:14, Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000148989055",Name:"HLG-80H-24",               Stock_Qty:9,  Reserved_Qty:null,Available_Qty:9,  Landed_Unit_Value:51.42, hot:false},
+    {id:"2894850000148989051",Name:"HLG-100H-24",              Stock_Qty:8,  Reserved_Qty:null,Available_Qty:8,  Landed_Unit_Value:57.50, hot:false},
+    {id:"2894850000175160086",Name:"STL40L24DC",               Stock_Qty:8,  Reserved_Qty:0,   Available_Qty:8,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000148989042",Name:"CLG-100H-12",              Stock_Qty:7,  Reserved_Qty:null,Available_Qty:7,  Landed_Unit_Value:49.40, hot:false},
+    {id:"2894850000175184029",Name:"KKSC05-DMX-4CH",           Stock_Qty:6,  Reserved_Qty:0,   Available_Qty:6,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184032",Name:"ZeroX2-NSW",               Stock_Qty:5,  Reserved_Qty:0,   Available_Qty:5,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000148989079",Name:"PWM-90-24",                Stock_Qty:4,  Reserved_Qty:null,Available_Qty:4,  Landed_Unit_Value:50.00, hot:false},
+    {id:"2894850000148989054",Name:"HLG-60H-24",               Stock_Qty:3,  Reserved_Qty:null,Available_Qty:3,  Landed_Unit_Value:36.84, hot:false},
+    {id:"2894850000148989085",Name:"SMT-024-096VTDSW-MELV",    Stock_Qty:3,  Reserved_Qty:null,Available_Qty:3,  Landed_Unit_Value:69.26, hot:false},
+    {id:"2894850000148989092",Name:"VOP96L24DC",               Stock_Qty:3,  Reserved_Qty:null,Available_Qty:3,  Landed_Unit_Value:73.50, hot:false},
+    {id:"2894850000148989046",Name:"E96L24DC-KO",              Stock_Qty:2,  Reserved_Qty:null,Available_Qty:2,  Landed_Unit_Value:56.00, hot:false},
+    {id:"2894850000148989057",Name:"IDLV-25-24",               Stock_Qty:2,  Reserved_Qty:null,Available_Qty:2,  Landed_Unit_Value:13.75, hot:false},
+    {id:"2894850000175160085",Name:"STL20L24DC",               Stock_Qty:2,  Reserved_Qty:0,   Available_Qty:2,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175160087",Name:"XLG-50-AB",                Stock_Qty:2,  Reserved_Qty:0,   Available_Qty:2,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000148989044",Name:"CVD60L24DC",               Stock_Qty:1,  Reserved_Qty:null,Available_Qty:1,  Landed_Unit_Value:66.67, hot:false},
+    {id:"2894850000148989052",Name:"HLG-40H-24",               Stock_Qty:1,  Reserved_Qty:null,Available_Qty:1,  Landed_Unit_Value:36.00, hot:false},
+    {id:"2894850000175184025",Name:"KKDM-06",                  Stock_Qty:1,  Reserved_Qty:0,   Available_Qty:1,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175160084",Name:"SMT-024-150VTDSW",         Stock_Qty:1,  Reserved_Qty:0,   Available_Qty:1,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184022",Name:"ELDO-LN200D-D2Z2C2",       Stock_Qty:1,  Reserved_Qty:0,   Available_Qty:1,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000148989043",Name:"CLG-60-12",                Stock_Qty:0,  Reserved_Qty:null,Available_Qty:0,  Landed_Unit_Value:47.67, hot:false},
+    {id:"2894850000148989080",Name:"SGA-12U24-P1J",            Stock_Qty:0,  Reserved_Qty:null,Available_Qty:0,  Landed_Unit_Value:14.72, hot:false},
+    {id:"2894850000175179111",Name:"KKPS-05U-60",              Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184020",Name:"Lutron Diva 0-10V",        Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184021",Name:"DVSTV-453-WH",             Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184023",Name:"HLG-150H-24",              Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184024",Name:"KKDL-03",                  Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184026",Name:"KKPS-05-60W-BK",           Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175184030",Name:"PWM-60-12",                Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175193001",Name:"KKDL-04",                  Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
+    {id:"2894850000175193002",Name:"visDIM PRO 30",            Stock_Qty:0,  Reserved_Qty:0,   Available_Qty:0,  Landed_Unit_Value:null,  hot:false},
+  ].map(r=>({...r, hot: HOT_SKUS.includes(r.Name)}));
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────
-render();
+// Wait for Zoho SDK if available, otherwise load immediately
+if (typeof ZOHO !== 'undefined') {
+  ZOHO.embeddedApp.on("PageLoad", function(data){ loadData(); });
+  ZOHO.embeddedApp.init();
+} else {
+  loadData();
+}
 </script>
 </body>
 </html>
