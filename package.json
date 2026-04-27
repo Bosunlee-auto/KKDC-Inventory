@@ -1,0 +1,9 @@
+{
+  "name": "kkdc-inventory",
+  "version": "1.0.0",
+  "description": "KKDC NJ Warehouse Inventory Portal",
+  "private": true,
+  "engines": {
+    "node": "18.x"
+  }
+}

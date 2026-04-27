@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KKDC Inventory — NJ Warehouse</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f3f3f3;height:100vh;overflow:hidden}
+.crm{display:flex;flex-direction:column;height:100vh;background:#f3f3f3}
+/* Top Nav */
+.topnav{height:44px;background:#1a3d5c;display:flex;align-items:center;padding:0 16px;flex-shrink:0}
+.tn-logo{font-size:13px;font-weight:700;color:#fff;letter-spacing:0.5px;margin-right:20px}
+.tn-mod{font-size:12px;color:rgba(255,255,255,0.55);padding:0 12px;height:44px;display:flex;align-items:center;cursor:pointer;border-bottom:2px solid transparent}
+.tn-mod.active{color:#fff;border-bottom:2px solid #4db8ff}
+.tn-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.tn-date{font-size:11px;color:rgba(255,255,255,0.45)}
+.tn-refresh{padding:4px 10px;font-size:11px;font-weight:600;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:3px;cursor:pointer}
+.tn-refresh:hover{background:rgba(255,255,255,0.25)}
+.tn-loading{font-size:11px;color:rgba(255,255,255,0.6)}
+/* Sub Nav */
+.subnav{height:36px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;padding:0 16px;box-shadow:0 1px 3px rgba(0,0,0,0.06);flex-shrink:0}
+.sn-tab{font-size:12px;color:#555;padding:0 14px;height:36px;display:flex;align-items:center;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;gap:5px}
+.sn-tab:hover{color:#1a3d5c;background:#f7f9fc}
+.sn-tab.active{color:#1a3d5c;font-weight:600;border-bottom:2px solid #1a3d5c}
+.sn-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;background:#e8e8e8;color:#666}
+.sn-badge.alert{background:#fde8e8;color:#b91c1c}
+/* Module Header */
+.mod-hdr{padding:9px 16px;background:#fff;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.mod-title{font-size:15px;font-weight:600;color:#1a1a1a}
+.mod-sub{font-size:10px;color:#888;margin-top:1px}
+/* Onto Bar */
+.onto-bar{display:flex;gap:0;border-bottom:1px solid #ddd;flex-shrink:0;background:#fff}
+.onto-item{flex:1;padding:7px 14px;border-right:1px solid #eee;display:flex;align-items:center;gap:8px}
+.onto-item:last-child{border-right:none}
+.onto-icon{width:28px;height:28px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.onto-label{font-size:11px;font-weight:600;color:#1a1a1a}
+.onto-desc{font-size:10px;color:#888;margin-top:1px}
+.onto-val{margin-left:auto;font-size:18px;font-weight:600;color:#1a1a1a}
+/* Content */
+.content{flex:1;display:flex;overflow:hidden;background:#f3f3f3}
+.vp{display:none;flex:1;flex-direction:row;overflow:hidden}
+.vp.active{display:flex}
+/* List Panel */
+.list-pnl{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#fff;margin:10px 0 10px 10px;border:1px solid #ddd;border-radius:4px}
+.ltb{padding:6px 10px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #e8e8e8;background:#fafafa}
+.ltb input{height:25px;font-size:11px;border:1px solid #ccc;border-radius:3px;padding:0 7px;background:#fff;color:#333;outline:none}
+.ltb input:focus{border-color:#1a3d5c}
+.ltb select{height:25px;font-size:11px;border:1px solid #ccc;border-radius:3px;padding:0 5px;background:#fff;color:#333}
+.ltb-cnt{font-size:10px;color:#999;margin-left:auto}
+.tbl-w{flex:1;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+th{position:sticky;top:0;background:#fafafa;padding:5px 9px;text-align:left;font-weight:600;font-size:10px;color:#666;border-bottom:1px solid #e0e0e0;white-space:nowrap}
+td{padding:6px 9px;border-bottom:1px solid #f0f0f0;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+tr:hover td{background:#f0f5fa}
+.lnk{color:#1a6bbf;cursor:pointer;font-weight:500}
+.lnk:hover{text-decoration:underline}
+.tag{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:600}
+.tok{background:#e6f4ea;color:#2d7a3a;border:1px solid #b8dfc0}
+.tlow{background:#fff3e0;color:#b45309;border:1px solid #f5d08a}
+.tout{background:#fde8e8;color:#b91c1c;border:1px solid #f0b8b8}
+.tref{background:#f0f0f0;color:#666;border:1px solid #ddd}
+.abt{padding:2px 8px;font-size:10px;font-weight:600;border-radius:2px;cursor:pointer;white-space:nowrap;border:1px solid}
+.abt-in{background:#e3f0fd;color:#1a5fa6;border-color:#b0cef0}
+.abt-in:hover{background:#1a5fa6;color:#fff}
+/* Detail Panel */
+.detail-pnl{width:290px;min-width:290px;background:#fff;margin:10px 8px 10px 0;border:1px solid #ddd;border-radius:4px;display:flex;flex-direction:column;overflow:hidden}
+.dp-hdr{padding:9px 12px;background:#1a3d5c;color:#fff;flex-shrink:0}
+.dp-htitle{font-size:12px;font-weight:600}
+.dp-hsub{font-size:10px;opacity:0.65;margin-top:1px}
+.dp-body{flex:1;overflow-y:auto;padding:11px}
+/* Receive Form */
+.sf{padding:12px;overflow-y:auto;flex:1}
+.step-hdr{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.step-num{width:20px;height:20px;border-radius:50%;background:#1a3d5c;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-title{font-size:12px;font-weight:600;color:#1a3d5c}
+.step-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px}
+.sb-blue{background:#e3f0fd;color:#1a5fa6}
+.sb-orange{background:#fff3e0;color:#b45309}
+.sb-green{background:#e6f4ea;color:#2d7a3a}
+.rf-row{margin-bottom:7px}
+.rf-lbl{font-size:10px;font-weight:600;color:#555;margin-bottom:2px;display:flex;align-items:center;gap:5px}
+.auto-tag{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:#e6f4ea;color:#2d7a3a}
+.rf-row input,.rf-row select{width:100%;height:27px;font-size:11px;border:1px solid #ccc;border-radius:3px;padding:0 7px;background:#fff;color:#333;outline:none}
+.rf-row input:focus,.rf-row select:focus{border-color:#1a3d5c}
+.rf-row input.auto-filled{background:#f0f7ef;border-color:#96cc8a;color:#2d7a3a;font-weight:600}
+.sec-div{height:1px;background:#eee;margin:10px 0}
+/* Split Box */
+.split-box{background:#f7fafd;border:1px solid #c8dff5;border-radius:4px;padding:10px 11px;margin:8px 0}
+.split-title{font-size:10px;font-weight:600;color:#1a3d5c;margin-bottom:7px;text-transform:uppercase;letter-spacing:0.04em}
+.split-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #e4eef8;font-size:11px}
+.split-row:last-child{border-bottom:none;padding-top:5px}
+.sp-lbl{color:#555}
+.sp-val{font-weight:600;color:#1a1a1a}
+.sp-val.green{color:#2d7a3a}
+.sp-val.blue{color:#1a5fa6}
+.sp-val.red{color:#b91c1c}
+/* Buttons */
+.rf-btns{display:flex;gap:5px;margin-top:10px}
+.rf-save{flex:1;padding:7px;font-size:11px;font-weight:600;background:#1a3d5c;color:#fff;border:none;border-radius:3px;cursor:pointer}
+.rf-save:hover{background:#254e73}
+.rf-save:disabled{background:#aaa;cursor:not-allowed}
+.rf-cancel{padding:7px 11px;font-size:11px;color:#555;border:1px solid #ccc;border-radius:3px;background:#fff;cursor:pointer}
+/* Movements */
+.mov-type{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:600}
+.mv-in-stock{background:#e6f4ea;color:#2d7a3a;border:1px solid #b8dfc0}
+.mv-in-pass{background:#e3f0fd;color:#1a5fa6;border:1px solid #b0cef0}
+.mv-out{background:#fde8e8;color:#b91c1c;border:1px solid #f0b8b8}
+/* Status Bar */
+.statusbar{height:22px;background:#f7f7f7;border-top:1px solid #e0e0e0;padding:0 14px;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.sb-item{font-size:10px;color:#999}
+.sb-item span{color:#444;font-weight:600}
+/* Toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1a3d5c;color:#fff;padding:8px 20px;border-radius:3px;font-size:11px;font-weight:600;opacity:0;transition:opacity 0.25s;z-index:999;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+/* Loading overlay */
+.loading-overlay{position:fixed;inset:0;background:rgba(26,61,92,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;color:#fff}
+.loading-spinner{width:36px;height:36px;border:3px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;font-weight:500}
+/* Callout */
+.callout{background:#fffbea;border:1px solid #f5d08a;border-radius:3px;padding:7px 9px;margin-bottom:8px;font-size:11px;color:#7a5c00;line-height:1.55}
+.callout.blue{background:#e8f4ff;border-color:#b0cef0;color:#1a4a7a}
+.warn-box{background:#fde8e8;border:1px solid #f0b8b8;border-radius:3px;padding:7px 10px;font-size:11px;color:#b91c1c;margin:6px 0}
+.so-info-box{background:#f0f7ef;border:1px solid #96cc8a;border-radius:3px;padding:8px 10px;margin:6px 0;font-size:11px}
+.so-info-row{display:flex;justify-content:space-between;padding:1px 0;color:#555}
+.so-info-row span:last-child{color:#2d7a3a;font-weight:600}
+.empty-msg{padding:18px;text-align:center;color:#aaa;font-size:11px}
+.dp-sec{margin-bottom:10px}
+.dp-stitle{font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid #f0f0f0}
+.dp-row{display:flex;justify-content:space-between;padding:2px 0;font-size:11px}
+.dp-label{color:#888}
+.dp-val{color:#333;font-weight:500}
+</style>
+</head>
+<body>
+
+<div id="loading-overlay" class="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading KKDC Inventory...</div>
+</div>
+
+<div class="crm">
+  <!-- Top Nav -->
+  <div class="topnav">
+    <span class="tn-logo">KKDC CRM</span>
+    <span class="tn-mod">Projects</span>
+    <span class="tn-mod">Sales Orders</span>
+    <span class="tn-mod active">Cost Catalog</span>
+    <span class="tn-mod">Inventory Movements</span>
+    <div class="tn-right">
+      <span class="tn-loading" id="tn-loading"></span>
+      <span class="tn-date" id="tn-date"></span>
+      <button class="tn-refresh" onclick="loadAll()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- Sub Nav -->
+  <div class="subnav">
+    <span class="sn-tab active" id="sn-us" onclick="setTab('us')">US Stock <span class="sn-badge" id="badge-us">—</span></span>
+    <span class="sn-tab" id="sn-ref" onclick="setTab('ref')">Reference <span class="sn-badge" id="badge-ref">—</span></span>
+    <span class="sn-tab" id="sn-rcv" onclick="setTab('rcv')">⬇ Receive Stock</span>
+    <span class="sn-tab" id="sn-mov" onclick="setTab('mov')">Movements</span>
+    <span class="sn-tab" id="sn-low" onclick="setTab('low')">Low / Out <span class="sn-badge alert" id="badge-low">—</span></span>
+  </div>
+
+  <!-- Module Header -->
+  <div class="mod-hdr">
+    <div>
+      <div class="mod-title" id="mod-title">Cost Catalog — US Stock (KKDC Owned)</div>
+      <div class="mod-sub" id="mod-sub">NJ Warehouse</div>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button onclick="setTab('rcv')" style="padding:5px 11px;font-size:11px;color:#1a3d5c;border:1px solid #c0ccd8;border-radius:3px;background:#fff;cursor:pointer">⬇ Receive Stock</button>
+    </div>
+  </div>
+
+  <!-- Ontology Bar -->
+  <div class="onto-bar" id="onto-bar">
+    <div class="onto-item"><div class="onto-icon" style="background:#e6f4ea;color:#2d7a3a">US</div><div><div class="onto-label">US Stock</div><div class="onto-desc">KKDC Owned · NJ Warehouse</div></div><div class="onto-val" id="onto-us">—</div></div>
+    <div class="onto-item"><div class="onto-icon" style="background:#fff3e0;color:#b45309">IN</div><div><div class="onto-label">In Stock</div><div class="onto-desc">Available to allocate</div></div><div class="onto-val" id="onto-in">—</div></div>
+    <div class="onto-item"><div class="onto-icon" style="background:#fde8e8;color:#b91c1c">OUT</div><div><div class="onto-label">Out of Stock</div><div class="onto-desc">Needs replenishment</div></div><div class="onto-val" id="onto-out">—</div></div>
+    <div class="onto-item"><div class="onto-icon" style="background:#f0f0f0;color:#666">REF</div><div><div class="onto-label">Reference Only</div><div class="onto-desc">Customer Owned · Pass-Through</div></div><div class="onto-val" id="onto-ref">—</div></div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- US Stock Tab -->
+    <div class="vp active" id="vp-us">
+      <div class="list-pnl">
+        <div class="ltb">
+          <input type="text" id="s-us" placeholder="Search SKU..." oninput="renderUS()" style="width:155px">
+          <select id="f-us" onchange="renderUS()">
+            <option value="all">All Status</option>
+            <option value="ok">In Stock</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+          </select>
+          <span class="ltb-cnt" id="cnt-us"></span>
+        </div>
+        <div class="tbl-w">
+          <table>
+            <thead><tr>
+              <th style="width:32%">SKU Name</th>
+              <th style="width:10%;text-align:right">Stock</th>
+              <th style="width:10%;text-align:right">Reserved</th>
+              <th style="width:10%;text-align:right">Available</th>
+              <th style="width:12%;text-align:right">Unit Cost</th>
+              <th style="width:12%">Status</th>
+              <th style="width:14%">Action</th>
+            </tr></thead>
+            <tbody id="tb-us"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="detail-pnl">
+        <div class="dp-hdr"><div class="dp-htitle">Quick Info</div><div class="dp-hsub" id="dp-us-sub">Select a SKU</div></div>
+        <div id="dp-us-body" class="empty-msg">Click any SKU to view details<br>or click [Receive] to process stock-in</div>
+      </div>
+    </div>
+
+    <!-- Reference Tab -->
+    <div class="vp" id="vp-ref">
+      <div class="list-pnl">
+        <div class="ltb">
+          <input type="text" id="s-ref" placeholder="Search SKU..." oninput="renderRef()" style="width:155px">
+          <span class="ltb-cnt" id="cnt-ref"></span>
+        </div>
+        <div class="tbl-w">
+          <table>
+            <thead><tr>
+              <th style="width:40%">SKU Name</th>
+              <th style="width:18%;text-align:right">Unit Cost</th>
+              <th style="width:22%">Vendor</th>
+              <th style="width:20%">Action</th>
+            </tr></thead>
+            <tbody id="tb-ref"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="detail-pnl">
+        <div class="dp-hdr"><div class="dp-htitle">Reference Catalog</div><div class="dp-hsub">Customer-Owned / Pass-Through NJ</div></div>
+        <div class="dp-body">
+          <div class="callout"><strong>Ontology:</strong> Ordered per project after customer deposit. KKDC does not hold ownership. Any surplus at receipt automatically becomes KKDC stock.</div>
+          <div class="dp-sec">
+            <div class="dp-stitle">Summary</div>
+            <div class="dp-row"><span class="dp-label">Reference SKUs</span><span class="dp-val" id="ref-cnt">—</span></div>
+            <div class="dp-row"><span class="dp-label">No unit cost set</span><span class="dp-val" id="ref-nocost">—</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Receive Tab -->
+    <div class="vp" id="vp-rcv">
+      <div class="list-pnl">
+        <div class="dp-hdr" style="padding:9px 12px">
+          <div class="dp-htitle" style="font-size:13px;color:#fff">⬇ Receive Stock — Split Receipt</div>
+          <div class="dp-hsub" style="color:rgba(255,255,255,0.65)">Surplus above SO qty automatically becomes KKDC stock</div>
+        </div>
+        <div class="sf">
+          <!-- Step 1 -->
+          <div class="step-hdr"><div class="step-num">1</div><div class="step-title">What arrived?</div><span class="step-badge sb-blue">RECEIPT</span></div>
+          <div class="rf-row">
+            <div class="rf-lbl">SKU *</div>
+            <select id="rcv-sku" onchange="onSkuChange()"><option value="">— Select SKU —</option></select>
+          </div>
+          <div class="rf-row">
+            <div class="rf-lbl">Total Qty Received *</div>
+            <input type="number" id="rcv-total" min="1" placeholder="e.g. 300" oninput="calcSplit()">
+          </div>
+          <div class="rf-row">
+            <div class="rf-lbl">Vendor / PO Note (optional)</div>
+            <input type="text" id="rcv-vendor" placeholder="e.g. TRC Electronics, PO#1234">
+          </div>
+          <div class="sec-div"></div>
+          <!-- Step 2 -->
+          <div class="step-hdr"><div class="step-num">2</div><div class="step-title">Link to Sales Order?</div><span class="step-badge sb-orange">OPTIONAL</span></div>
+          <div class="rf-row">
+            <div class="rf-lbl">Sales Order</div>
+            <select id="rcv-so" onchange="onSoChange()"><option value="">— No SO (all qty → KKDC stock) —</option></select>
+          </div>
+          <div id="so-info" style="display:none"></div>
+          <div id="so-qty-section" style="display:none">
+            <div class="rf-row">
+              <div class="rf-lbl">Qty required by SO <span class="auto-tag" id="auto-tag">AUTO</span></div>
+              <input type="number" id="rcv-so-qty" min="0" oninput="calcSplit()">
+            </div>
+          </div>
+          <div class="sec-div"></div>
+          <!-- Step 3 -->
+          <div class="step-hdr"><div class="step-num">3</div><div class="step-title">Split Result</div><span class="step-badge sb-green">AUTO-CALCULATED</span></div>
+          <div class="split-box">
+            <div class="split-title">Receipt Breakdown</div>
+            <div class="split-row"><span class="sp-lbl">Total received</span><span class="sp-val" id="sp-total">—</span></div>
+            <div class="split-row" id="sp-pass-row" style="display:none"><span class="sp-lbl">→ Pass-through (Customer SO)</span><span class="sp-val blue" id="sp-pass">—</span></div>
+            <div class="split-row"><span class="sp-lbl">→ KKDC Stock (surplus)</span><span class="sp-val green" id="sp-stock">—</span></div>
+            <div class="split-row" id="sp-after-row" style="display:none"><span class="sp-lbl">Stock_Qty after receipt</span><span class="sp-val" id="sp-after">—</span></div>
+          </div>
+          <div class="warn-box" id="sp-warn-box" style="display:none">⚠ SO qty exceeds total received — short by <span id="sp-warn-val">—</span> units</div>
+          <div class="rf-row">
+            <div class="rf-lbl">Update Unit Cost (optional)</div>
+            <input type="number" id="rcv-cost" min="0" step="0.01" placeholder="Leave blank to keep current">
+          </div>
+          <div class="rf-btns">
+            <button class="rf-cancel" onclick="resetRcvForm()">Clear</button>
+            <button class="rf-save" id="rcv-save" onclick="saveReceipt()" disabled>Save Receipt → CRM</button>
+          </div>
+        </div>
+      </div>
+      <!-- SO Detail Panel -->
+      <div class="detail-pnl">
+        <div class="dp-hdr"><div class="dp-htitle">SO Detail</div><div class="dp-hsub" id="so-panel-sub">Select a Sales Order</div></div>
+        <div id="so-panel-body" class="empty-msg">Select an SO in Step 2 to preview driver requirements here</div>
+      </div>
+    </div>
+
+    <!-- Movements Tab -->
+    <div class="vp" id="vp-mov">
+      <div class="list-pnl">
+        <div class="ltb">
+          <input type="text" id="s-mov" placeholder="Search SKU or SO..." oninput="renderMov()" style="width:155px">
+          <select id="f-mov" onchange="renderMov()">
+            <option value="all">All Types</option>
+            <option value="IN">IN (all)</option>
+            <option value="OUT">OUT</option>
+          </select>
+          <span class="ltb-cnt" id="cnt-mov"></span>
+        </div>
+        <div class="tbl-w">
+          <table>
+            <thead><tr>
+              <th style="width:13%">Type</th>
+              <th style="width:26%">SKU</th>
+              <th style="width:9%;text-align:right">Qty</th>
+              <th style="width:13%">SO</th>
+              <th style="width:12%">Date</th>
+              <th style="width:27%">Note</th>
+            </tr></thead>
+            <tbody id="tb-mov"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="detail-pnl">
+        <div class="dp-hdr"><div class="dp-htitle">Movement Types</div><div class="dp-hsub">Ontology reference</div></div>
+        <div class="dp-body">
+          <div class="dp-sec"><div class="dp-stitle">IN (Stock)</div><div style="font-size:11px;color:#555;line-height:1.6">Surplus qty — KKDC owned. Increases Stock_Qty.</div></div>
+          <div style="height:1px;background:#f0f0f0;margin:8px 0"></div>
+          <div class="dp-sec"><div class="dp-stitle">IN (Pass-Through)</div><div style="font-size:11px;color:#555;line-height:1.6">Customer-owned qty for confirmed SO. Does NOT increase Stock_Qty.</div></div>
+          <div style="height:1px;background:#f0f0f0;margin:8px 0"></div>
+          <div class="dp-sec"><div class="dp-stitle">OUT</div><div style="font-size:11px;color:#555;line-height:1.6">Auto-generated on SO Status → Shipped. Decreases Stock_Qty and Reserved_Qty.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Low / Out Tab -->
+    <div class="vp" id="vp-low">
+      <div class="list-pnl">
+        <div class="ltb">
+          <input type="text" id="s-low" placeholder="Search SKU..." oninput="renderLow()" style="width:155px">
+          <select id="f-low" onchange="renderLow()">
+            <option value="all">All</option>
+            <option value="out">Out of Stock</option>
+            <option value="low">Low Stock</option>
+          </select>
+          <span class="ltb-cnt" id="cnt-low"></span>
+        </div>
+        <div class="tbl-w">
+          <table>
+            <thead><tr>
+              <th style="width:35%">SKU Name</th>
+              <th style="width:11%;text-align:right">Stock</th>
+              <th style="width:11%;text-align:right">Reserved</th>
+              <th style="width:13%;text-align:right">Unit Cost</th>
+              <th style="width:16%">Vendor</th>
+              <th style="width:14%">Action</th>
+            </tr></thead>
+            <tbody id="tb-low"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="detail-pnl">
+        <div class="dp-hdr"><div class="dp-htitle">Receive Stock</div><div class="dp-hsub">Low/Out items need attention</div></div>
+        <div class="dp-body">
+          <div style="font-size:11px;color:#555;line-height:1.65">Click <strong>[Receive]</strong> on any row to jump to the Split Receipt form with the SKU pre-selected.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Status Bar -->
+  <div class="statusbar">
+    <span class="sb-item">US Stock: <span id="sb-us">—</span></span>
+    <span class="sb-item">Reference: <span id="sb-ref">—</span></span>
+    <span class="sb-item">Out of Stock: <span id="sb-out">—</span></span>
+    <span class="sb-item">Inventory Value: <span id="sb-val">—</span></span>
+    <span class="sb-item" style="margin-left:auto">Updated: <span id="sb-updated">—</span></span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── State ─────────────────────────────────────────────────
+let usInv = [], refInv = [], openSOs = [], movements = [];
+let curSkuId = null, curSoId = null;
+
+// ── API Calls ─────────────────────────────────────────────
+async function loadAll() {
+  setLoading(true);
+  try {
+    const [invRes, soRes, movRes] = await Promise.all([
+      fetch('/api/inventory'),
+      fetch('/api/orders'),
+      fetch('/api/movements')
+    ]);
+    const inv = await invRes.json();
+    const so = await soRes.json();
+    const mov = await movRes.json();
+
+    usInv = (inv.us_stock || []).map(r => ({
+      id: r.id,
+      name: r.Name,
+      stock: r.Stock_Qty ?? 0,
+      reserved: r.Reserved_Qty ?? 0,
+      avail: r.Available_Qty ?? 0,
+      cost: r.Landed_Unit_Value || null,
+      vendor: r.Vendor?.name || '—'
+    })).sort((a, b) => b.stock - a.stock);
+
+    refInv = (inv.reference || []).map(r => ({
+      id: r.id,
+      name: r.Name,
+      cost: r.Landed_Unit_Value || null,
+      vendor: r.Vendor?.name || '—'
+    }));
+
+    openSOs = so.orders || [];
+    movements = mov.movements || [];
+
+    const ts = inv.timestamp ? new Date(inv.timestamp).toLocaleString() : '—';
+    document.getElementById('sb-updated').textContent = ts;
+    document.getElementById('tn-date').textContent = ts;
+
+    initSummary();
+    renderUS();
+    renderRef();
+    renderMov();
+    populateSkuSelect();
+    populateSoSelect();
+
+  } catch (err) {
+    showToast('Error loading data: ' + err.message);
+  }
+  setLoading(false);
+}
+
+// ── Summary ───────────────────────────────────────────────
+function initSummary() {
+  const inS = usInv.filter(r => r.stock > 0).length;
+  const out = usInv.filter(r => r.stock === 0).length;
+  const low = usInv.filter(r => r.stock > 0 && r.stock <= 5).length;
+  const val = usInv.reduce((s, r) => s + (r.stock * (r.cost || 0)), 0);
+
+  document.getElementById('onto-us').textContent = usInv.length;
+  document.getElementById('onto-in').textContent = inS;
+  document.getElementById('onto-out').textContent = out;
+  document.getElementById('onto-ref').textContent = refInv.length;
+  document.getElementById('badge-us').textContent = usInv.length;
+  document.getElementById('badge-ref').textContent = refInv.length;
+  document.getElementById('badge-low').textContent = out + low;
+  document.getElementById('sb-us').textContent = usInv.length;
+  document.getElementById('sb-ref').textContent = refInv.length;
+  document.getElementById('sb-out').textContent = out;
+  document.getElementById('sb-val').textContent = '$' + Math.round(val).toLocaleString();
+  document.getElementById('ref-cnt').textContent = refInv.length;
+  document.getElementById('ref-nocost').textContent = refInv.filter(r => !r.cost).length;
+}
+
+// ── Tab Navigation ────────────────────────────────────────
+function setTab(t) {
+  ['us','ref','rcv','mov','low'].forEach(x => {
+    document.getElementById('sn-'+x).classList.remove('active');
+    document.getElementById('vp-'+x).classList.remove('active');
+  });
+  document.getElementById('sn-'+t).classList.add('active');
+  document.getElementById('vp-'+t).classList.add('active');
+  const titles = {
+    us: 'Cost Catalog — US Stock (KKDC Owned)',
+    ref: 'Reference Catalog — Customer Owned / Pass-Through',
+    rcv: 'Receive Stock — Split Receipt',
+    mov: 'Inventory Movements Log',
+    low: 'Low / Out of Stock'
+  };
+  document.getElementById('mod-title').textContent = titles[t];
+  if (t === 'low') renderLow();
+  if (t === 'mov') renderMov();
+}
+
+// ── Status helpers ────────────────────────────────────────
+function st(r) {
+  if (r.stock === null || r.stock === undefined) return 'na';
+  if (r.stock === 0) return 'out';
+  if (r.stock <= 5) return 'low';
+  return 'ok';
+}
+function tag(s) {
+  if (s === 'ok') return '<span class="tag tok">In Stock</span>';
+  if (s === 'low') return '<span class="tag tlow">Low</span>';
+  if (s === 'out') return '<span class="tag tout">Out</span>';
+  return '<span class="tag tref">—</span>';
+}
+function movTag(t) {
+  if (t === 'IN') return '<span class="mov-type mv-in-stock">IN · Stock</span>';
+  if (t === 'IN-Pass') return '<span class="mov-type mv-in-pass">IN · Pass</span>';
+  return '<span class="mov-type mv-out">OUT</span>';
+}
+
+// ── Render Tables ─────────────────────────────────────────
+function renderUS() {
+  const q = document.getElementById('s-us').value.toLowerCase();
+  const f = document.getElementById('f-us').value;
+  let d = usInv.filter(r => {
+    if (q && !r.name.toLowerCase().includes(q)) return false;
+    if (f !== 'all' && st(r) !== f) return false;
+    return true;
+  });
+  document.getElementById('tb-us').innerHTML = d.map(r => `<tr>
+    <td><span class="lnk" onclick="quickRcv('${r.id}')">${r.name}</span></td>
+    <td style="text-align:right">${r.stock ?? '—'}</td>
+    <td style="text-align:right;color:${r.reserved > 0 ? '#b45309' : '#bbb'}">${r.reserved ?? '—'}</td>
+    <td style="text-align:right;font-weight:600">${r.avail ?? '—'}</td>
+    <td style="text-align:right">${r.cost ? '$' + r.cost.toFixed(2) : '—'}</td>
+    <td>${tag(st(r))}</td>
+    <td><button class="abt abt-in" onclick="quickRcv('${r.id}')">Receive</button></td>
+  </tr>`).join('');
+  document.getElementById('cnt-us').textContent = d.length + ' / ' + usInv.length + ' records';
+}
+
+function renderRef() {
+  const q = document.getElementById('s-ref').value.toLowerCase();
+  let d = refInv.filter(r => !q || r.name.toLowerCase().includes(q));
+  document.getElementById('tb-ref').innerHTML = d.map(r => `<tr>
+    <td><span class="lnk">${r.name}</span></td>
+    <td style="text-align:right">${r.cost ? '$' + r.cost.toFixed(2) : '—'}</td>
+    <td style="color:#888">${r.vendor}</td>
+    <td><span class="tag tref">Customer Owned</span></td>
+  </tr>`).join('');
+  document.getElementById('cnt-ref').textContent = d.length + ' records';
+}
+
+function renderMov() {
+  const q = document.getElementById('s-mov').value.toLowerCase();
+  const f = document.getElementById('f-mov').value;
+  let d = movements.filter(m => {
+    if (q && !m.sku.toLowerCase().includes(q) && !m.so.toLowerCase().includes(q)) return false;
+    if (f !== 'all' && !m.type.startsWith(f)) return false;
+    return true;
+  });
+  document.getElementById('tb-mov').innerHTML = d.map(m => `<tr>
+    <td>${movTag(m.type)}</td>
+    <td title="${m.sku}">${m.sku}</td>
+    <td style="text-align:right;font-weight:600">${m.qty}</td>
+    <td style="color:#888">${m.so}</td>
+    <td style="color:#888">${m.date}</td>
+    <td style="color:#aaa;font-size:10px" title="${m.note}">${m.note}</td>
+  </tr>`).join('');
+  document.getElementById('cnt-mov').textContent = d.length + ' records';
+}
+
+function renderLow() {
+  const q = document.getElementById('s-low').value.toLowerCase();
+  const f = document.getElementById('f-low').value;
+  let d = usInv.filter(r => {
+    const s = st(r);
+    if (s !== 'out' && s !== 'low') return false;
+    if (q && !r.name.toLowerCase().includes(q)) return false;
+    if (f === 'out' && s !== 'out') return false;
+    if (f === 'low' && s !== 'low') return false;
+    return true;
+  });
+  document.getElementById('tb-low').innerHTML = d.map(r => `<tr>
+    <td><span class="lnk" onclick="quickRcv('${r.id}')">${r.name}</span></td>
+    <td style="text-align:right;font-weight:600;color:${r.stock === 0 ? '#b91c1c' : '#b45309'}">${r.stock}</td>
+    <td style="text-align:right;color:${r.reserved > 0 ? '#b45309' : '#bbb'}">${r.reserved}</td>
+    <td style="text-align:right">${r.cost ? '$' + r.cost.toFixed(2) : '—'}</td>
+    <td style="color:#888">${r.vendor}</td>
+    <td><button class="abt abt-in" onclick="quickRcv('${r.id}')">Receive</button></td>
+  </tr>`).join('');
+  document.getElementById('cnt-low').textContent = d.length + ' records';
+}
+
+// ── SKU / SO Selects ──────────────────────────────────────
+function populateSkuSelect() {
+  const sel = document.getElementById('rcv-sku');
+  sel.innerHTML = '<option value="">— Select SKU —</option>';
+  const og1 = document.createElement('optgroup'); og1.label = 'US Stock (KKDC Owned)';
+  usInv.forEach(r => {
+    const o = document.createElement('option');
+    o.value = r.id; o.dataset.name = r.name; o.dataset.stock = r.stock;
+    o.dataset.cost = r.cost || ''; o.textContent = `[${r.stock}] ${r.name}`;
+    og1.appendChild(o);
+  });
+  const og2 = document.createElement('optgroup'); og2.label = 'Reference (Customer Owned)';
+  refInv.forEach(r => {
+    const o = document.createElement('option');
+    o.value = r.id; o.dataset.name = r.name; o.dataset.stock = 0;
+    o.dataset.cost = r.cost || ''; o.textContent = r.name;
+    og2.appendChild(o);
+  });
+  sel.appendChild(og1); sel.appendChild(og2);
+}
+
+function populateSoSelect() {
+  const sel = document.getElementById('rcv-so');
+  sel.innerHTML = '<option value="">— No SO (all qty → KKDC stock) —</option>';
+  openSOs.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s.id; o.textContent = 'SO ' + s.so;
+    sel.appendChild(o);
+  });
+}
+
+// ── Receive Form Logic ────────────────────────────────────
+function quickRcv(id) {
+  setTab('rcv');
+  setTimeout(() => {
+    document.getElementById('rcv-sku').value = id;
+    onSkuChange();
+    document.getElementById('rcv-total').focus();
+  }, 60);
+}
+
+function onSkuChange() {
+  curSkuId = document.getElementById('rcv-sku').value || null;
+  document.getElementById('rcv-so').value = '';
+  curSoId = null;
+  document.getElementById('so-info').style.display = 'none';
+  document.getElementById('so-qty-section').style.display = 'none';
+  document.getElementById('so-panel-body').innerHTML = '<div class="empty-msg">Select an SO to preview</div>';
+  document.getElementById('so-panel-sub').textContent = 'Select a Sales Order';
+  calcSplit();
+}
+
+async function onSoChange() {
+  const soSel = document.getElementById('rcv-so');
+  curSoId = soSel.value || null;
+  const soText = curSoId ? soSel.options[soSel.selectedIndex].textContent : '';
+
+  if (!curSoId) {
+    document.getElementById('so-info').style.display = 'none';
+    document.getElementById('so-qty-section').style.display = 'none';
+    document.getElementById('so-panel-body').innerHTML = '<div class="empty-msg">Select an SO to preview</div>';
+    document.getElementById('so-panel-sub').textContent = 'Select a Sales Order';
+    calcSplit();
+    return;
+  }
+
+  document.getElementById('so-panel-sub').textContent = soText;
+  document.getElementById('so-info').innerHTML = '<div style="padding:8px;font-size:11px;color:#888">⟳ Loading SO data...</div>';
+  document.getElementById('so-info').style.display = 'block';
+
+  try {
+    const res = await fetch(`/api/orders?id=${curSoId}`);
+    const data = await res.json();
+
+    const skuId = document.getElementById('rcv-sku').value;
+    const drivers = data.drivers || [];
+    const matchedDriver = drivers.find(d => d.skuId === skuId);
+
+    // SO info box
+    let infoHtml = '<div class="so-info-box">';
+    infoHtml += `<div style="font-size:10px;font-weight:600;color:#2d7a3a;margin-bottom:5px;text-transform:uppercase">${soText} — Driver Requirements</div>`;
+    if (drivers.length === 0) {
+      infoHtml += '<div style="font-size:11px;color:#888">No US Stock drivers on this SO</div>';
+    } else {
+      drivers.forEach(d => {
+        const isMatch = d.skuId === skuId;
+        infoHtml += `<div class="so-info-row" style="${isMatch ? 'background:#e6f4ea;padding:2px 4px;border-radius:2px;font-weight:600' : ''}">
+          <span>${d.skuName}${isMatch ? ' ←' : ''}</span><span>${d.qty} units</span></div>`;
+      });
+    }
+    infoHtml += '</div>';
+    document.getElementById('so-info').innerHTML = infoHtml;
+
+    // Auto-fill
+    document.getElementById('so-qty-section').style.display = 'block';
+    const qtyInput = document.getElementById('rcv-so-qty');
+    if (matchedDriver) {
+      qtyInput.value = matchedDriver.qty;
+      qtyInput.classList.add('auto-filled');
+      qtyInput.readOnly = true;
+      document.getElementById('auto-tag').textContent = 'AUTO-FILLED';
+    } else {
+      qtyInput.value = '';
+      qtyInput.classList.remove('auto-filled');
+      qtyInput.readOnly = false;
+      document.getElementById('auto-tag').textContent = 'MANUAL';
+    }
+
+    // Right panel
+    let panelHtml = '<div style="padding:11px">';
+    panelHtml += `<div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;margin-bottom:6px">${soText} — All Drivers</div>`;
+    if (drivers.length === 0) {
+      panelHtml += '<div style="font-size:11px;color:#aaa">No driver lines</div>';
+    } else {
+      drivers.forEach(d => {
+        const isMatch = d.skuId === skuId;
+        panelHtml += `<div style="padding:5px 7px;margin-bottom:4px;border-radius:3px;border:1px solid ${isMatch ? '#96cc8a' : '#e0e8f0'};background:${isMatch ? '#f0f7ef' : '#fafafa'}">
+          <div style="font-size:11px;font-weight:600;color:${isMatch ? '#2d7a3a' : '#1a1a1a'}">${d.skuName}${isMatch ? ' ✓' : ''}</div>
+          <div style="font-size:10px;color:#888">Qty: ${d.qty} · ${d.shipFrom}</div></div>`;
+      });
+    }
+    panelHtml += '</div>';
+    document.getElementById('so-panel-body').innerHTML = panelHtml;
+
+  } catch (err) {
+    document.getElementById('so-info').innerHTML = '<div class="warn-box">Error loading SO data</div>';
+  }
+
+  calcSplit();
+}
+
+function calcSplit() {
+  const skuSel = document.getElementById('rcv-sku');
+  const opt = skuSel.options[skuSel.selectedIndex];
+  const total = parseInt(document.getElementById('rcv-total').value) || 0;
+  const soQty = parseInt(document.getElementById('rcv-so-qty').value) || 0;
+  const hasSO = !!curSoId;
+  const currentStock = parseInt(opt?.dataset?.stock || 0);
+  const saveBtn = document.getElementById('rcv-save');
+
+  document.getElementById('sp-total').textContent = total || '—';
+
+  if (!total || !skuSel.value) {
+    document.getElementById('sp-stock').textContent = '—';
+    document.getElementById('sp-pass-row').style.display = 'none';
+    document.getElementById('sp-after-row').style.display = 'none';
+    document.getElementById('sp-warn-box').style.display = 'none';
+    saveBtn.disabled = true;
+    return;
+  }
+
+  if (hasSO && soQty > 0) {
+    document.getElementById('sp-pass-row').style.display = 'flex';
+    document.getElementById('sp-pass').textContent = soQty + ' units (customer owned)';
+    if (soQty > total) {
+      document.getElementById('sp-warn-box').style.display = 'block';
+      document.getElementById('sp-warn-val').textContent = soQty - total;
+      document.getElementById('sp-stock').textContent = '0 units';
+      document.getElementById('sp-after-row').style.display = 'none';
+      saveBtn.disabled = true;
+    } else {
+      document.getElementById('sp-warn-box').style.display = 'none';
+      const surplus = total - soQty;
+      document.getElementById('sp-stock').textContent = surplus + ' units → KKDC Stock';
+      document.getElementById('sp-after-row').style.display = 'flex';
+      document.getElementById('sp-after').textContent = currentStock + ' + ' + surplus + ' = ' + (currentStock + surplus);
+      saveBtn.disabled = false;
+    }
+  } else {
+    document.getElementById('sp-pass-row').style.display = 'none';
+    document.getElementById('sp-warn-box').style.display = 'none';
+    document.getElementById('sp-stock').textContent = total + ' units → KKDC Stock';
+    document.getElementById('sp-after-row').style.display = 'flex';
+    document.getElementById('sp-after').textContent = currentStock + ' + ' + total + ' = ' + (currentStock + total);
+    saveBtn.disabled = false;
+  }
+}
+
+async function saveReceipt() {
+  const skuSel = document.getElementById('rcv-sku');
+  const opt = skuSel.options[skuSel.selectedIndex];
+  const skuId = skuSel.value;
+  const skuName = opt.dataset.name;
+  const total = parseInt(document.getElementById('rcv-total').value) || 0;
+  const soQty = parseInt(document.getElementById('rcv-so-qty').value) || 0;
+  const soSel = document.getElementById('rcv-so');
+  const soText = curSoId ? soSel.options[soSel.selectedIndex].textContent : '';
+  const vendor = document.getElementById('rcv-vendor').value;
+  const newCost = document.getElementById('rcv-cost').value;
+  const currentStock = parseInt(opt.dataset.stock) || 0;
+
+  if (!skuId || total <= 0) { showToast('Please select a SKU and enter quantity'); return; }
+
+  const btn = document.getElementById('rcv-save');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  try {
+    const res = await fetch('/api/receive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        skuId, skuName, totalQty: total,
+        soId: curSoId, soName: soText, soQty: curSoId ? soQty : 0,
+        newUnitCost: newCost || null, vendor, currentStock
+      })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      showToast(`✅ Receipt saved — Stock: ${currentStock} → ${data.newStock}`);
+      resetRcvForm();
+      await loadAll(); // Refresh data
+    } else {
+      showToast('Error: ' + (data.error || 'Unknown error'));
+    }
+  } catch (err) {
+    showToast('Error: ' + err.message);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Save Receipt → CRM';
+}
+
+function resetRcvForm() {
+  ['rcv-sku','rcv-so'].forEach(id => { document.getElementById(id).value = ''; });
+  ['rcv-total','rcv-so-qty','rcv-vendor','rcv-cost'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('rcv-so-qty').classList.remove('auto-filled');
+  document.getElementById('rcv-so-qty').readOnly = false;
+  document.getElementById('so-info').style.display = 'none';
+  document.getElementById('so-qty-section').style.display = 'none';
+  document.getElementById('sp-pass-row').style.display = 'none';
+  document.getElementById('sp-after-row').style.display = 'none';
+  document.getElementById('sp-warn-box').style.display = 'none';
+  document.getElementById('sp-total').textContent = '—';
+  document.getElementById('sp-stock').textContent = '—';
+  document.getElementById('rcv-save').disabled = true;
+  document.getElementById('so-panel-body').innerHTML = '<div class="empty-msg">Select an SO to preview</div>';
+  document.getElementById('so-panel-sub').textContent = 'Select a Sales Order';
+  curSkuId = null; curSoId = null;
+}
+
+// ── Utilities ─────────────────────────────────────────────
+function setLoading(show) {
+  document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
+  document.getElementById('tn-loading').textContent = show ? '⟳ Loading...' : '';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── Init ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('mod-sub').textContent = 'NJ Warehouse · ' + new Date().toLocaleDateString();
+  loadAll();
+});
+</script>
+</body>
+</html>
