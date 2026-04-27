@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KKDC | LUCIS CENTRUM — Label System Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f8f7f5;
+    --border: #e5e2dc;
+    --accent: #c8a96e;
+    --accent-soft: rgba(200, 169, 110, 0.12);
+    --text: #1a1815;
+    --text-muted: #8a8480;
+    --text-dim: #5a5550;
+    --quote-color: #2a7a64;
+    --order-color: #2a5e8a;
+    --done-color: #3a7a2a;
+    --tag-bg: #f0ede8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    padding: 60px 80px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .doc-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 80px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-dim);
+    max-width: 600px;
+    line-height: 1.8;
+  }
+
+  /* MAIN LAYOUT */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 80px;
+  }
+
+  /* SECTION */
+  section {
+    padding: 60px 80px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--text);
+  }
+
+  /* LABEL ARCHITECTURE */
+  .layer-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  .layer-cell {
+    background: var(--surface);
+    padding: 24px 20px;
+  }
+
+  .layer-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .layer-name {
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .layer-note {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .layer-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+
+  .badge-ai { background: rgba(126, 184, 164, 0.15); color: var(--quote-color); }
+  .badge-manual { background: rgba(122, 158, 190, 0.15); color: var(--order-color); }
+
+  /* ACCOUNT CARDS */
+  .accounts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+  }
+
+  .account-card {
+    background: var(--surface);
+    padding: 40px;
+  }
+
+  .account-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .quote-tag { color: var(--quote-color); }
+  .order-tag { color: var(--order-color); }
+
+  .account-email {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .account-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  /* LABEL EXAMPLES */
+  .label-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .label-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .label-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .label-chip.quote { border-color: var(--quote-color); color: var(--quote-color); }
+  .label-chip.order { border-color: var(--order-color); color: var(--order-color); }
+  .label-chip.status { border-color: #6b6560; color: var(--text-dim); }
+  .label-chip.done { border-color: var(--done-color); color: var(--done-color); }
+  .label-chip.agency { border-color: #8b7eb8; color: #a99ed8; }
+  .label-chip.office { border-color: #b87e7e; color: #d8a09e; }
+
+  .label-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  /* WORKFLOW */
+  .workflow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .workflow-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 32px;
+  }
+
+  .workflow-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .flow-step {
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .flow-step:last-child { border-bottom: none; }
+
+  .flow-arrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .flow-content { flex: 1; }
+
+  .flow-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .flow-note {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* STATUS TABLE */
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .status-cell {
+    background: var(--surface);
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .status-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--accent);
+  }
+
+  .status-name {
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+
+  /* RULES */
+  .rules-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .rule-item {
+    background: var(--surface);
+    padding: 20px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .rule-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .rule-text {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .rule-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* EXAMPLE EMAIL */
+  .email-example {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    margin-top: 20px;
+  }
+
+  .email-subject {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .email-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .email-note {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  p { color: var(--text-dim); font-size: 16px; line-height: 1.8; margin-bottom: 16px; }
+
+  @media (max-width: 900px) {
+    header, section, footer { padding-left: 24px; padding-right: 24px; }
+    .hero { padding: 48px 24px; }
+    .layer-grid { grid-template-columns: 1fr 1fr; }
+    .accounts, .workflow { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">KKDC USA · LUCIS CENTRUM</div>
+  <div class="doc-meta">
+    Staff Brief — Email Labelling System<br>
+    April 2026 · For: Quote Admin & Order Admin
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-label">Internal Brief</div>
+  <h1>The New <em>Label</em><br>System</h1>
+  <p class="hero-sub">
+    A structured 5-layer labelling system has been installed across all KKDC email accounts.
+    This brief explains what the labels mean, which ones are applied automatically by AI,
+    and which ones you manage manually.
+  </p>
+</div>
+
+<!-- ARCHITECTURE -->
+<section>
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Label Architecture — 5 Layers</h2>
+  </div>
+
+  <div class="layer-grid">
+    <div class="layer-cell">
+      <div class="layer-num">1.</div>
+      <div class="layer-name">Function</div>
+      <div class="layer-note">What type of email is this?</div>
+      <div class="layer-badge badge-ai">AI Auto</div>
+    </div>
+    <div class="layer-cell">
+      <div class="layer-num">2.</div>
+      <div class="layer-name">Status</div>
+      <div class="layer-note">Where is this in the workflow?</div>
+      <div class="layer-badge badge-manual">Manual</div>
+    </div>
+    <div class="layer-cell">
+      <div class="layer-num">3.</div>
+      <div class="layer-name">Agency / Vendor</div>
+      <div class="layer-note">Which agency or vendor?</div>
+      <div class="layer-badge badge-ai">AI Auto</div>
+    </div>
+    <div class="layer-cell">
+      <div class="layer-num">4.</div>
+      <div class="layer-name">Technical</div>
+      <div class="layer-note">Special requirements?</div>
+      <div class="layer-badge badge-manual">Manual</div>
+    </div>
+    <div class="layer-cell">
+      <div class="layer-num">5.</div>
+      <div class="layer-name">Office</div>
+      <div class="layer-note">NY or NJ project?</div>
+      <div class="layer-badge badge-ai">AI Auto</div>
+    </div>
+  </div>
+
+  <p>
+    <strong style="color: var(--text)">AI handles layers 1, 3, and 5 automatically</strong> — you only need to manage layers 2 and 4.
+    Labels are applied within minutes of an email arriving.
+  </p>
+</section>
+
+<!-- ACCOUNTS -->
+<section>
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Your Account Labels</h2>
+  </div>
+
+  <div class="accounts">
+    <!-- QUOTE -->
+    <div class="account-card">
+      <div class="account-tag quote-tag">Quote Admin · Young Cho</div>
+      <div class="account-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4d3c382239280d2626292e383e2c632e2220">[email&#160;protected]</a></div>
+      <div class="account-title">Quote Account</div>
+      <p style="font-size:13px; margin-bottom:20px;">
+        Receives all RFQs and quote requests. AI automatically identifies and labels incoming quote requests.
+      </p>
+
+      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Function Labels (AI)</div>
+      <ul class="label-list">
+        <li class="label-item">
+          <span class="label-chip quote">1.QUOTE</span>
+          <span class="label-desc">Incoming quote request / RFQ</span>
+        </li>
+        <li class="label-item">
+          <span class="label-chip quote">1.CS/misc</span>
+          <span class="label-desc">Customer service related</span>
+        </li>
+      </ul>
+
+      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin: 20px 0 12px;">Technical Labels (Manual)</div>
+      <ul class="label-list">
+        <li class="label-item">
+          <span class="label-chip status">4.Submittal</span>
+          <span class="label-desc">Submittal required</span>
+        </li>
+        <li class="label-item">
+          <span class="label-chip status">4.WD.Dwg</span>
+          <span class="label-desc">Working drawing required</span>
+        </li>
+      </ul>
+
+      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin: 20px 0 12px;">Office Labels (AI)</div>
+      <ul class="label-list">
+        <li class="label-item">
+          <span class="label-chip office">5.NY</span>
+          <span class="label-desc">New York project</span>
+        </li>
+        <li class="label-item">
+          <span class="label-chip office">5.Nj</span>
+          <span class="label-desc">New Jersey project</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ORDER -->
+    <div class="account-card">
+      <div class="account-tag order-tag">Order Admin · Heeyoung Lim</div>
+      <div class="account-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="422d3026273002292926213731236c212d2f">[email&#160;protected]</a></div>
+      <div class="account-title">Order Account</div>
+      <p style="font-size:13px; margin-bottom:20px;">
+        Handles all customer POs and factory/vendor purchase orders. AI distinguishes between inbound POs and outbound purchase orders.
+      </p>
+
+      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Function Labels (AI)</div>
+      <ul class="label-list">
+        <li class="label-item">
+          <span class="label-chip order">1.PO</span>
+          <span class="label-desc">Customer Purchase Order received</span>
+        </li>
+        <li class="label-item">
+          <span class="label-chip order">1.BUY</span>
+          <span class="label-desc">KKDC ordering from factory / vendor</span>
+        </li>
+        <li class="label-item">
+          <span class="label-chip order">1.CS/shipping-issue</span>
+          <span class="label-desc">Shipping problem or claim</span>
+        </li>
+      </ul>
+
+      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin: 20px 0 12px;">Technical Labels (Manual)</div>
+      <ul class="label-list">
+        <li class="label-item">
+          <span class="label-chip status">4.Submittal</span>
+          <span class="label-desc">Submittal required</span>
+        </li>
+        <li class="label-item">
+          <span class="label-chip status">4.WD.Dwg</span>
+          <span class="label-desc">Working drawing required</span>
+        </li>
+      </ul>
+
+      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin: 20px 0 12px;">Office Labels (AI)</div>
+      <ul class="label-list">
+        <li class="label-item">
+          <span class="label-chip office">5.NY</span>
+          <span class="label-desc">New York project</span>
+        </li>
+        <li class="label-item">
+          <span class="label-chip office">5.Nj</span>
+          <span class="label-desc">New Jersey project</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- STATUS LABELS -->
+<section>
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Status Labels — Your Responsibility</h2>
+  </div>
+
+  <p>These are the only labels you need to apply manually. Update the status as the email progresses through your workflow.</p>
+
+  <div class="status-grid" style="margin-top: 24px;">
+    <div class="status-cell">
+      <div class="status-code">2.02 in-progress</div>
+      <div class="status-name">Actively working on it</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.03 awaiting-client</div>
+      <div class="status-name">Waiting for client reply</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.04 awaiting-factory</div>
+      <div class="status-name">Waiting for factory / vendor</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.05 awaiting-internal</div>
+      <div class="status-name">Waiting for Bosun / Nigel</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.06 query</div>
+      <div class="status-name">Internal question raised</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.07 sp-needed</div>
+      <div class="status-name">Special price approval needed</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.08 submittal-needed</div>
+      <div class="status-name">Submittal document needed</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.09 on-hold</div>
+      <div class="status-name">Temporarily on hold</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.10 hfr</div>
+      <div class="status-name">Hold for Release</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.11 urgent</div>
+      <div class="status-name">Urgent — act immediately</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.12 cancelled</div>
+      <div class="status-name">Cancelled by client</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-code">2.13 superceded</div>
+      <div class="status-name">Replaced by newer version</div>
+    </div>
+    <div class="status-cell" style="border: 1px solid var(--done-color); background: rgba(168,196,154,0.05);">
+      <div class="status-code" style="color:var(--done-color)">2.DONE</div>
+      <div class="status-name">CRM entered — email role complete</div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section>
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>How It Works — Typical Flows</h2>
+  </div>
+
+  <div class="workflow">
+    <div class="workflow-card">
+      <div class="workflow-title">Quote Flow</div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-arrow">→</div>
+          <div class="flow-content">
+            <div class="flow-label">Email arrives</div>
+            <div class="flow-note">AI applies 1.QUOTE + 3.SLS + 5.NY automatically</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-arrow">→</div>
+          <div class="flow-content">
+            <div class="flow-label">You start working</div>
+            <div class="flow-note">Add 2.02 in-progress</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-arrow">→</div>
+          <div class="flow-content">
+            <div class="flow-label">Waiting for client</div>
+            <div class="flow-note">Change to 2.03 awaiting-client</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-arrow">→</div>
+          <div class="flow-content">
+            <div class="flow-label">Quote sent, CRM entered</div>
+            <div class="flow-note">Apply 2.DONE — email role complete</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="workflow-card">
+      <div class="workflow-title">Order Flow</div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-arrow">→</div>
+          <div class="flow-content">
+            <div class="flow-label">PO arrives</div>
+            <div class="flow-note">AI applies 1.PO + 3.SLS automatically</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-arrow">→</div>
+          <div class="flow-content">
+            <div class="flow-label">Waiting for payment</div>
+            <div class="flow-note">Add 2.03 awaiting-client</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-arrow">→</div>
+          <div class="flow-content">
+            <div class="flow-label">Ordered from factory</div>
+            <div class="flow-note">Change to 2.04 awaiting-factory</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-arrow">→</div>
+          <div class="flow-content">
+            <div class="flow-label">CRM entered, shipped</div>
+            <div class="flow-note">Apply 2.DONE — email role complete</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section>
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Key Rules to Remember</h2>
+  </div>
+
+  <div class="rules-list">
+    <div class="rule-item">
+      <div class="rule-icon">🤖</div>
+      <div class="rule-text"><strong>Don't re-label what AI already labelled.</strong> If 1.QUOTE, 3.SLS, and 5.NY are already there — leave them. AI runs every 5 minutes on new emails.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-icon">✅</div>
+      <div class="rule-text"><strong>2.DONE = CRM entered.</strong> Only apply 2.DONE when you have fully entered the job into CRM/DocuGen. This is the signal that the email has served its purpose.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-icon">🔄</div>
+      <div class="rule-text"><strong>Only one status label at a time.</strong> Remove the old status before adding the new one. e.g. remove 2.03 awaiting-client before adding 2.04 awaiting-factory.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-icon">🚫</div>
+      <div class="rule-text"><strong>Never delete emails.</strong> The label system replaces the need to delete. If an email is done, apply 2.DONE and leave it.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-icon">⚡</div>
+      <div class="rule-text"><strong>Urgent?</strong> Add 2.11 urgent in addition to any other status label. This will surface it in your Multi-inbox urgent view immediately.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-icon">📋</div>
+      <div class="rule-text"><strong>Technical requirements.</strong> Add 4.Submittal or 4.WD.Dwg as soon as you identify the requirement — don't wait until it becomes a problem.</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLE -->
+<section>
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Example — What a Labelled Email Looks Like</h2>
+  </div>
+
+  <p>Here is what you will see on a typical incoming quote request from an SLS agency for a New York project:</p>
+
+  <div class="email-example">
+    <div class="email-subject">FW: RFQ — Midtown Office Tower L17 / OUS fixtures / 47 units</div>
+    <div class="email-labels">
+      <span class="label-chip quote">1.QUOTE</span>
+      <span class="label-chip agency">3.SLS</span>
+      <span class="label-chip office">5.NY</span>
+    </div>
+    <div class="email-note">Applied automatically by AI within 5 minutes of arrival. You then add the status label as you work on it.</div>
+  </div>
+
+  <div class="email-example" style="margin-top: 2px;">
+    <div class="email-subject">FW: RFQ — Midtown Office Tower L17 / OUS fixtures / 47 units</div>
+    <div class="email-labels">
+      <span class="label-chip quote">1.QUOTE</span>
+      <span class="label-chip status">2.05 awaiting-internal</span>
+      <span class="label-chip agency">3.SLS</span>
+      <span class="label-chip status">4.Submittal</span>
+      <span class="label-chip office">5.NY</span>
+    </div>
+    <div class="email-note">After you identify it needs a submittal and is waiting for Bosun's review.</div>
+  </div>
+
+  <div class="email-example" style="margin-top: 2px;">
+    <div class="email-subject">FW: RFQ — Midtown Office Tower L17 / OUS fixtures / 47 units</div>
+    <div class="email-labels">
+      <span class="label-chip quote">1.QUOTE</span>
+      <span class="label-chip done">2.DONE</span>
+      <span class="label-chip agency">3.SLS</span>
+      <span class="label-chip office">5.NY</span>
+    </div>
+    <div class="email-note">Quote sent, entered into DocuGen
