@@ -172,7 +172,7 @@ tr:hover td{background:#f0f5fa}
       <div class="mod-sub" id="mod-sub">NJ Warehouse</div>
     </div>
     <div style="display:flex;gap:6px">
-      <button onclick="setTab('rcv')" style="padding:5px 11px;font-size:11px;color:#1a3d5c;border:1px solid #c0ccd8;border-radius:3px;background:#fff;cursor:pointer">⬇ Receive Stock</button>
+      <button id="hdr-rcv-btn" onclick="headerRcvClick()" style="padding:5px 11px;font-size:11px;color:#1a3d5c;border:1px solid #c0ccd8;border-radius:3px;background:#fff;cursor:pointer">⬇ Receive Stock</button>
     </div>
   </div>
 
@@ -498,6 +498,33 @@ function setTab(t) {
   document.getElementById('mod-title').textContent = titles[t];
   if (t === 'low') renderLow();
   if (t === 'mov') renderMov();
+  updateHeaderRcvBtn();
+}
+
+// ── Header Receive Stock button: doubles as always-visible Save ──
+// (no scrolling required — mirrors the in-form Save Receipt button)
+function updateHeaderRcvBtn() {
+  const btn = document.getElementById('hdr-rcv-btn');
+  const onRcvTab = document.getElementById('vp-rcv').classList.contains('active');
+  if (!onRcvTab) {
+    btn.textContent = '⬇ Receive Stock';
+    btn.disabled = false;
+    btn.style.background = '#fff';
+    btn.style.color = '#1a3d5c';
+    return;
+  }
+  const saveBtn = document.getElementById('rcv-save');
+  const ready = saveBtn && !saveBtn.disabled;
+  btn.textContent = ready ? '✓ Save Receipt → CRM' : '⬇ Receive Stock (fill form below)';
+  btn.disabled = !ready;
+  btn.style.background = ready ? '#1a3d5c' : '#eee';
+  btn.style.color = ready ? '#fff' : '#999';
+}
+function headerRcvClick() {
+  const onRcvTab = document.getElementById('vp-rcv').classList.contains('active');
+  if (!onRcvTab) { setTab('rcv'); return; }
+  const saveBtn = document.getElementById('rcv-save');
+  if (saveBtn && !saveBtn.disabled) saveReceipt();
 }
 
 // ── Status helpers ────────────────────────────────────────
@@ -741,6 +768,7 @@ function calcSplit() {
     document.getElementById('sp-after-row').style.display = 'none';
     document.getElementById('sp-warn-box').style.display = 'none';
     saveBtn.disabled = true;
+    updateHeaderRcvBtn();
     return;
   }
 
@@ -769,6 +797,7 @@ function calcSplit() {
     document.getElementById('sp-after').textContent = currentStock + ' + ' + total + ' = ' + (currentStock + total);
     saveBtn.disabled = false;
   }
+  updateHeaderRcvBtn();
 }
 
 async function saveReceipt() {
@@ -833,6 +862,7 @@ function resetRcvForm() {
   document.getElementById('so-panel-body').innerHTML = '<div class="empty-msg">Select an SO to preview</div>';
   document.getElementById('so-panel-sub').textContent = 'Select a Sales Order';
   curSkuId = null; curSoId = null;
+  updateHeaderRcvBtn();
 }
 
 // ── Utilities ─────────────────────────────────────────────
