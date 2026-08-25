@@ -272,6 +272,10 @@ tr:hover td{background:#f0f5fa}
             <input type="number" id="rcv-total" min="1" placeholder="e.g. 300" oninput="calcSplit()">
           </div>
           <div class="rf-row">
+            <div class="rf-lbl">Date Received</div>
+            <input type="date" id="rcv-date">
+          </div>
+          <div class="rf-row">
             <div class="rf-lbl">Vendor / PO Note (optional)</div>
             <input type="text" id="rcv-vendor" placeholder="e.g. TRC Electronics, PO#1234">
           </div>
@@ -811,6 +815,7 @@ async function saveReceipt() {
   const soText = curSoId ? soSel.options[soSel.selectedIndex].textContent : '';
   const vendor = document.getElementById('rcv-vendor').value;
   const newCost = document.getElementById('rcv-cost').value;
+  const receivedDate = document.getElementById('rcv-date').value || new Date().toISOString().split('T')[0];
   const currentStock = parseInt(opt.dataset.stock) || 0;
 
   if (!skuId || total <= 0) { showToast('Please select a SKU and enter quantity'); return; }
@@ -826,7 +831,7 @@ async function saveReceipt() {
       body: JSON.stringify({
         skuId, skuName, totalQty: total,
         soId: curSoId, soName: soText, soQty: curSoId ? soQty : 0,
-        newUnitCost: newCost || null, vendor, currentStock
+        newUnitCost: newCost || null, vendor, currentStock, receivedDate
       })
     });
 
@@ -849,6 +854,7 @@ async function saveReceipt() {
 function resetRcvForm() {
   ['rcv-sku','rcv-so'].forEach(id => { document.getElementById(id).value = ''; });
   ['rcv-total','rcv-so-qty','rcv-vendor','rcv-cost'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('rcv-date').value = new Date().toISOString().split('T')[0];
   document.getElementById('rcv-so-qty').classList.remove('auto-filled');
   document.getElementById('rcv-so-qty').readOnly = false;
   document.getElementById('so-info').style.display = 'none';
@@ -880,6 +886,7 @@ function showToast(msg) {
 // ── Init ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('mod-sub').textContent = 'NJ Warehouse · ' + new Date().toLocaleDateString();
+  document.getElementById('rcv-date').value = new Date().toISOString().split('T')[0];
   loadAll();
 });
 </script>

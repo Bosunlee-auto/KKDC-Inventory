@@ -102,9 +102,9 @@ app.get('/api/orders', async (req, res) => {
 app.post('/api/receive', async (req, res) => {
   try {
     const token = await getAccessToken();
-    const { skuId, skuName, totalQty, soId, soName, soQty, newUnitCost, vendor, currentStock } = req.body;
+    const { skuId, skuName, totalQty, soId, soName, soQty, newUnitCost, vendor, currentStock, receivedDate } = req.body;
     if (!skuId || !totalQty) return res.status(400).json({ error: 'skuId and totalQty required' });
-    const today = new Date().toISOString().split('T')[0];
+    const today = receivedDate || new Date().toISOString().split('T')[0];
     const surplus = soId && soQty > 0 ? totalQty - soQty : totalQty;
     const passThrough = soId && soQty > 0 ? soQty : 0;
 
