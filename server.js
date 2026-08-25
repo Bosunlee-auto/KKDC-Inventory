@@ -152,3 +152,4 @@ app.listen(PORT, () => {
   console.log(`KKDC Inventory Portal running on port ${PORT}`);
   console.log(`CLIENT_ID: ${!!process.env.ZOHO_CLIENT_ID}, SECRET: ${!!process.env.ZOHO_CLIENT_SECRET}, REFRESH: ${!!process.env.ZOHO_REFRESH_TOKEN}`);
 });
+// deploy-trigger test 2026-08-25T02:21:34Z
