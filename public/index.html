@@ -102,6 +102,8 @@ tr:hover td{background:#f0f5fa}
 .rf-save:hover{background:#254e73}
 .rf-save:disabled{background:#aaa;cursor:not-allowed}
 .rf-cancel{padding:7px 11px;font-size:11px;color:#555;border:1px solid #ccc;border-radius:3px;background:#fff;cursor:pointer}
+.cost-edit{cursor:pointer;border-bottom:1px dashed #aaa}
+.cost-edit:hover{color:#1a5fa6;border-bottom-color:#1a5fa6}
 /* Movements */
 .mov-type{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:600}
 .mv-in-stock{background:#e6f4ea;color:#2d7a3a;border:1px solid #b8dfc0}
@@ -564,7 +566,7 @@ function renderUS() {
     <td style="text-align:right">${r.stock ?? '—'}</td>
     <td style="text-align:right;color:${r.reserved > 0 ? '#b45309' : '#bbb'}">${r.reserved ?? '—'}</td>
     <td style="text-align:right;font-weight:600">${r.avail ?? '—'}</td>
-    <td style="text-align:right">${r.cost ? '$' + r.cost.toFixed(2) : '—'}</td>
+    <td style="text-align:right"><span class="cost-edit" onclick="editCost('${r.id}','${r.name.replace(/'/g,"\\'")}',${r.cost || 0})" title="Click to update cost">${r.cost ? '$' + r.cost.toFixed(2) : '—'} ✎</span></td>
     <td>${tag(st(r))}</td>
     <td><button class="abt abt-in" onclick="quickRcv('${r.id}')">Receive</button></td>
   </tr>`).join('');
@@ -576,7 +578,7 @@ function renderRef() {
   let d = refInv.filter(r => !q || r.name.toLowerCase().includes(q));
   document.getElementById('tb-ref').innerHTML = d.map(r => `<tr>
     <td><span class="lnk">${r.name}</span></td>
-    <td style="text-align:right">${r.cost ? '$' + r.cost.toFixed(2) : '—'}</td>
+    <td style="text-align:right"><span class="cost-edit" onclick="editCost('${r.id}','${r.name.replace(/'/g,"\\'")}',${r.cost || 0})" title="Click to update cost">${r.cost ? '$' + r.cost.toFixed(2) : '—'} ✎</span></td>
     <td style="color:#888">${r.vendor}</td>
     <td><span class="tag tref">Customer Owned</span></td>
   </tr>`).join('');
@@ -802,6 +804,32 @@ function calcSplit() {
     saveBtn.disabled = false;
   }
   updateHeaderRcvBtn();
+}
+
+// ── Standalone cost correction (no receipt required) ──────
+async function editCost(skuId, skuName, currentCost) {
+  const input = prompt(`Update unit cost for ${skuName}\n\nCurrent: $${currentCost.toFixed(2)}\nEnter new landed unit cost:`, currentCost.toFixed(2));
+  if (input === null) return; // cancelled
+  const newCost = parseFloat(input);
+  if (isNaN(newCost) || newCost < 0) { showToast('Please enter a valid cost'); return; }
+  if (newCost === currentCost) return; // no change
+
+  try {
+    const res = await fetch('/api/update-cost', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ skuId, skuName, oldCost: currentCost, newCost })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(`✅ ${skuName} cost updated: $${currentCost.toFixed(2)} → $${newCost.toFixed(2)}`);
+      await loadAll();
+    } else {
+      showToast('Error: ' + (data.error || 'Unknown error'));
+    }
+  } catch (err) {
+    showToast('Error: ' + err.message);
+  }
 }
 
 async function saveReceipt() {

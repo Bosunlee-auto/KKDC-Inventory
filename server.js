@@ -98,6 +98,34 @@ app.get('/api/orders', async (req, res) => {
   } catch(err) { res.status(500).json({ error: err.message }); }
 });
 
+// ── POST /api/update-cost ─────────────────────────────────
+// Standalone unit-cost correction — no quantity movement involved.
+// Updates Cost_Catalog.Landed_Unit_Value directly. Does not touch
+// Stock_Qty/Reserved_Qty and does not create an Inventory_Movements
+// record (that module tracks quantity movement, not cost changes).
+app.post('/api/update-cost', async (req, res) => {
+  try {
+    const token = await getAccessToken();
+    const { skuId, skuName, oldCost, newCost } = req.body;
+    if (!skuId || newCost === undefined || newCost === null) {
+      return res.status(400).json({ error: 'skuId and newCost required' });
+    }
+    const parsed = parseFloat(newCost);
+    if (isNaN(parsed) || parsed < 0) {
+      return res.status(400).json({ error: 'newCost must be a valid non-negative number' });
+    }
+    const updateRes = await fetch(`${BASE}/Cost_Catalog/${skuId}`, {
+      method: 'PUT', headers: zohoHeaders(token),
+      body: JSON.stringify({ data: [{ Landed_Unit_Value: parsed }] })
+    });
+    const updateData = await updateRes.json();
+    if (updateData.data?.[0]?.status !== 'success') {
+      return res.status(500).json({ error: 'Cost_Catalog update failed', details: updateData });
+    }
+    res.json({ success: true, skuId, skuName, oldCost, newCost: parsed });
+  } catch(err) { res.status(500).json({ error: err.message }); }
+});
+
 // ── POST /api/receive ─────────────────────────────────────
 app.post('/api/receive', async (req, res) => {
   try {
