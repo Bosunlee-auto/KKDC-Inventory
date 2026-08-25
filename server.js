@@ -47,24 +47,27 @@ app.get('/api/debug', (req, res) => {
 });
 
 // ── GET /api/inventory ────────────────────────────────────
-// US_Stock 필드 삭제됨 → Stock_Qty로만 재고 여부 판단
+// 재고 여부는 US_Stock 필드로 판단 (Stock_Qty로 대체하지 않음).
+// US_Stock=true인데 Stock_Qty=0인 레코드(재입고 대기 등)도
+// us_stock 목록에 남아 있어야 재주문 신호가 보인다.
 app.get('/api/inventory', async (req, res) => {
   try {
     const token = await getAccessToken();
     const allRes = await fetch(
-      `${BASE}/Cost_Catalog/search?criteria=(Master_SKU:equals:null)&fields=id,Name,Stock_Qty,Reserved_Qty,Available_Qty,Landed_Unit_Value,Vendor&per_page=200`,
+      `${BASE}/Cost_Catalog/search?criteria=(Master_SKU:equals:null)&fields=id,Name,Stock_Qty,Reserved_Qty,Available_Qty,Landed_Unit_Value,Vendor,US_Stock,Safety_Stock&per_page=200`,
       { headers: zohoHeaders(token) }
     );
     const allData = await allRes.json();
     const all = allData.data || [];
 
-    // 재고 여부는 Stock_Qty로만 판단
-    const inStock = all.filter(r => r.Stock_Qty > 0).sort((a,b) => b.Stock_Qty - a.Stock_Qty);
-    const outStock = all.filter(r => !r.Stock_Qty || r.Stock_Qty <= 0);
+    // 재고 여부는 US_Stock 필드로 판단. Stock_Qty는 정렬용일 뿐.
+    const inStock = all.filter(r => r.US_Stock === true)
+      .sort((a,b) => (b.Stock_Qty || 0) - (a.Stock_Qty || 0));
+    const reference = all.filter(r => r.US_Stock !== true);
 
     res.json({
-      us_stock: inStock,      // Stock_Qty > 0 → 재고 있음
-      reference: outStock,    // Stock_Qty = 0 or null → 재고 없음
+      us_stock: inStock,     // US_Stock=true → KKDC가 실제 보유/추적하는 재고
+      reference: reference,  // US_Stock=false (or null) → Vendor / Non-stock
       all: all,
       timestamp: new Date().toISOString()
     });
